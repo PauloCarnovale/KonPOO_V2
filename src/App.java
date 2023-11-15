@@ -252,7 +252,7 @@ public class App {
             return null;
         }
 
-        destinos.forEach(destino -> System.out.println("Código: " + destino.getCodigo() + ", Nome: " + destino.getNome()));
+        destinos.forEach(destino -> System.out.println("Código: " + destino.getCodigo() + ", Nome: " + destino.getSigla()));
         System.out.print("Escolha o destino de " + tipo + " pelo código: ");
         int codigo = scanner.nextInt();
         return destinos.stream()
@@ -275,8 +275,8 @@ public class App {
             System.out.println("Valor Declarado: R$ " + carga.getValorDeclarado());
             System.out.println("Tempo Máximo para o Frete: " + carga.getTempoMaximo() + " dias");
             System.out.println("Tipo de Carga: " + carga.getTipoCarga().getDescricao());
-            System.out.println("Origem: " + carga.getOrigem().getNome());
-            System.out.println("Destino: " + carga.getDestino().getNome());
+            System.out.println("Origem: " + carga.getOrigem().getSigla());
+            System.out.println("Destino: " + carga.getDestino().getSigla());
             String nomeCaminhao = carga.getCaminhaoDesignado() != null ? carga.getCaminhaoDesignado().getNome() : "Não Atribuído";
             System.out.println("Caminhão Designado: " + nomeCaminhao);
             System.out.println("-----------------------------------");
@@ -312,10 +312,13 @@ public class App {
             }
         }
 
+        // Gera um código único para o novo itinerário
+        String codItinerario = "BR-" + (itinerarios.size() + 1);
+
         // Caso não exista, cadastra um novo itinerário
         System.out.println("Informe a distância em km entre os destinos:");
         double distancia = scanner.nextDouble();
-        Itinerario novoItinerario = new Itinerario(origem, destino, distancia);
+        Itinerario novoItinerario = new Itinerario(codItinerario, origem, destino, distancia);
         itinerarios.add(novoItinerario);
         System.out.println("Itinerário cadastrado com sucesso!");
     }

@@ -1,12 +1,12 @@
 public class Destino {
     private int codigo;
-    private String nome;
+    private String sigla;
     private String cidade;
 
 
-    public Destino(int codigo, String nome, String cidade) {
+    public Destino(int codigo, String sigla, String cidade) {
         this.codigo = codigo;
-        this.nome = nome;
+        this.sigla = sigla;
         this.cidade = cidade;
     }
 
@@ -16,11 +16,11 @@ public class Destino {
     public void setCodigo(int codigo) {
         this.codigo = codigo;
     }
-    public String getNome() {
-        return nome;
+    public String getSigla() {
+        return sigla;
     }
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setSigla(String sigla) {
+        this.sigla = sigla;
     }
     public String getCidade() {
         return cidade;
@@ -30,7 +30,7 @@ public class Destino {
     }
     @Override
     public String toString() {
-        return "Destino [codigo=" + codigo + ", nome=" + nome + ", cidade=" + cidade + "]";
+        return "Destino [codigo=" + codigo + ", nome=" + sigla + ", cidade=" + cidade + "]";
     }
 
 }

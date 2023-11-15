@@ -1,12 +1,17 @@
 public class Itinerario {
+    private String codigoItinerario;
     private Destino origem;
     private Destino destino;
     private double distancia;
 
-    public Itinerario(Destino origem, Destino destino, double distancia) {
+    public Itinerario(String codigoItinerario, Destino origem, Destino destino, double distancia) {
         this.origem = origem;
         this.destino = destino;
         this.distancia = distancia;
+        this.codigoItinerario = codigoItinerario;
+    }
+    public String getCodigoItinerario() {
+        return codigoItinerario;
     }
 
     public Destino getOrigem() {
@@ -27,6 +32,6 @@ public class Itinerario {
 
     @Override
     public String toString() {
-        return "Itinerario [origem=" + origem.getNome() + ", destino=" + destino.getNome() + ", distancia=" + distancia + " km]";
+        return "Itinerario [codigo=" + codigoItinerario + ", origem=" + origem.getSigla() + ", destino=" + destino.getSigla() + ", distancia=" + distancia + " km]";
     }
 }
