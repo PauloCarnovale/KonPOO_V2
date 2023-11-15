@@ -1,3 +1,5 @@
+package model;
+
 public class Carga {
     private int codigo;
     private int peso;

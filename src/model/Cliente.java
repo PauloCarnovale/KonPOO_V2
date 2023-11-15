@@ -1,4 +1,4 @@
-package Services;
+package model;
 
 public class Cliente {
     private String cod;

@@ -1,8 +1,4 @@
-/**
- * Representa um caminhão no sistema de gerenciamento de cargas.
- * Esta classe armazena informações sobre um caminhão, incluindo seu nome,
- * velocidade média, autonomia, custo por quilômetro rodado e um código identificador.
- */
+package model;
 
 public class Caminhao{
     String nome;

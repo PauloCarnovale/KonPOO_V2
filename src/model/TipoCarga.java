@@ -1,3 +1,5 @@
+package model;
+
 public class TipoCarga {
     public int numero;
     public String descricao;

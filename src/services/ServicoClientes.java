@@ -1,4 +1,6 @@
-package Services;
+package services;
+
+import model.Cliente;
 
 import java.util.ArrayList;
 import java.util.List;

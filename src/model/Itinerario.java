@@ -1,3 +1,5 @@
+package model;
+
 public class Itinerario {
     private String codigoItinerario;
     private Destino origem;

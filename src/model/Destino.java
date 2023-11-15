@@ -1,3 +1,5 @@
+package model;
+
 public class Destino {
     private int codigo;
     private String sigla;
