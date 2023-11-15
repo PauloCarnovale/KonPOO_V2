@@ -10,7 +10,8 @@ public class App {
     private List<Caminhao> listaCaminhoes = new ArrayList<>();
     private List<TipoCarga> tiposDeCarga = new ArrayList<>();
     private List<Destino> destinos = new ArrayList<>();
-    private Queue<Carga> cargasPendentes; // Isso precisa ser inicializado dependendo da implementação da fila que você estiver usando
+    private Queue<Carga> cargasPendentes;
+    private List<Itinerario> itinerarios = new ArrayList<>();
     private Scanner scanner = new Scanner(System.in);
     ServicoCaminhoes caminhoes = new ServicoCaminhoes();
     ServicoClientes clientes = new ServicoClientes();
@@ -62,6 +63,9 @@ public class App {
                         break;
                     case 12:
                         //imprimirCadastros()
+                    case 13:
+                        gerenciarItinerarios();
+                        break;
                     case 0:
                         System.out.println("Finalizando o sistema...");
                         break;
@@ -278,6 +282,44 @@ public class App {
             System.out.println("-----------------------------------");
         }
     }
+
+    private void gerenciarItinerarios() {
+        System.out.println("Gerenciar Itinerários:");
+
+        if (destinos.isEmpty() || destinos.size() < 2) {
+            System.out.println("É necessário ter pelo menos dois destinos cadastrados para criar um itinerário.");
+            return;
+        }
+
+        // Seleciona a origem e o destino
+        System.out.println("Escolha o destino de origem:");
+        Destino origem = selecionarDestino("origem");
+        System.out.println("Escolha o destino de destino:");
+        Destino destino = selecionarDestino("destino");
+
+        // Procura se já existe itinerário cadastrado entre esses destinos
+        for (Itinerario itinerario : itinerarios) {
+            if (itinerario.getOrigem().equals(origem) && itinerario.getDestino().equals(destino)) {
+                System.out.println("Distância atual: " + itinerario.getDistancia() + " km. Deseja atualizar? (Sim/Não)");
+                String resposta = scanner.next().trim();
+                if (resposta.equalsIgnoreCase("Sim")) {
+                    System.out.println("Informe a nova distância em km:");
+                    double novaDistancia = scanner.nextDouble();
+                    itinerario.setDistancia(novaDistancia);
+                    System.out.println("Distância atualizada com sucesso!");
+                }
+                return;
+            }
+        }
+
+        // Caso não exista, cadastra um novo itinerário
+        System.out.println("Informe a distância em km entre os destinos:");
+        double distancia = scanner.nextDouble();
+        Itinerario novoItinerario = new Itinerario(origem, destino, distancia);
+        itinerarios.add(novoItinerario);
+        System.out.println("Itinerário cadastrado com sucesso!");
+    }
+
 
 
 }

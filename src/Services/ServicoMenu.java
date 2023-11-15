@@ -13,6 +13,8 @@ public class ServicoMenu {
         System.out.println("9. Fretar cargas");
         System.out.println("10. Salvar dados");
         System.out.println("11. Carregar dados");
+        System.out.println("12. Imprimir cadastro");
+        System.out.println("13. Gerenciar Itinerarios");
         System.out.println("0. Finalizar sistema");
         System.out.print("Escolha uma opção: ");
     }
