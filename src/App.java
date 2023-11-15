@@ -22,7 +22,6 @@ public class App {
     }
 
     public void executarSistema(){
-        menu.exibirMenu();
             int opcao;
             do {
                 menu.exibirMenu();

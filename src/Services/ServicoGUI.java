@@ -16,16 +16,23 @@ public class ServicoGUI {
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.anchor = GridBagConstraints.CENTER;
 
-        // Criar e adicionar os botões
-        JButton btnCadastro = new JButton("Cadastro");
-        JButton btnAlteracoes = new JButton("Alterações");
-        JButton btnFrete = new JButton("Frete");
-        JButton btnOutros = new JButton("Outros");
+        // Criar e adicionar as listas suspensas
+        String[] cadastroOptions = {"Opção 1", "Opção 2", "Opção 3"};
+        JComboBox<String> cbCadastro = new JComboBox<>(cadastroOptions);
 
-        frame.add(btnCadastro, gbc);
-        frame.add(btnAlteracoes, gbc);
-        frame.add(btnFrete, gbc);
-        frame.add(btnOutros, gbc);
+        String[] alteracoesOptions = {"Opção 1", "Opção 2", "Opção 3"};
+        JComboBox<String> cbAlteracoes = new JComboBox<>(alteracoesOptions);
+
+        String[] freteOptions = {"Opção 1", "Opção 2", "Opção 3"};
+        JComboBox<String> cbFrete = new JComboBox<>(freteOptions);
+
+        String[] outrosOptions = {"Opção 1", "Opção 2", "Opção 3"};
+        JComboBox<String> cbOutros = new JComboBox<>(outrosOptions);
+
+        frame.add(cbCadastro, gbc);
+        frame.add(cbAlteracoes, gbc);
+        frame.add(cbFrete, gbc);
+        frame.add(cbOutros, gbc);
 
         // Configurar a visibilidade do frame
         frame.setVisible(true);
