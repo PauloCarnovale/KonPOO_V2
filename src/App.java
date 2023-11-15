@@ -63,7 +63,7 @@ public class App {
                         // carregarDados();
                         break;
                     case 12:
-                        //imprimirCadastros()
+                        imprimirCadastros();
                     case 13:
                         gerenciarItinerarios();
                         break;
@@ -324,6 +324,17 @@ public class App {
         System.out.println("Itinerário cadastrado com sucesso!");
     }
 
+    private void imprimirCadastros() {
+        System.out.println("Dados dos Caminhões Cadastrados:");
+        for (Caminhao caminhao : listaCaminhoes) {
+            System.out.println(caminhao); // Usando o método toString de Caminhao
+        }
+
+        System.out.println("\nDados dos Clientes Cadastrados:");
+        for (Cliente cliente : listaClientes) {
+            System.out.println(cliente); // Usando o método toString de Cliente
+        }
+    }
 
 
 }

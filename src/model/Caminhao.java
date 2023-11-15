@@ -1,18 +1,18 @@
 package model;
 
-public class Caminhao{
-    String nome;
-    double velocidade;
-    double autonomia;
-    double custoporKm;
-    String codigo;
+public class Caminhao {
+    private String nome;
+    private double velocidade;
+    private double autonomia;
+    private double custoPorKm;
+    private String codigo;
 
-    public Caminhao(String nome, double velocidade, double autonomia, double custoporKm, String codigo){
-        this.nome=nome;
-        this.velocidade=velocidade;
-        this.autonomia=autonomia;
-        this.custoporKm=custoporKm;
-        this.codigo=codigo;
+    public Caminhao(String nome, double velocidade, double autonomia, double custoPorKm, String codigo) {
+        setNome(nome);
+        setVelocidade(velocidade);
+        setAutonomia(autonomia);
+        setCustoPorKm(custoPorKm);
+        setCodigo(codigo);
     }
 
     public String getNome() {
@@ -20,6 +20,9 @@ public class Caminhao{
     }
 
     public void setNome(String nome) {
+        if (nome == null || nome.trim().isEmpty()) {
+            throw new IllegalArgumentException("Nome do caminhão não pode ser vazio.");
+        }
         this.nome = nome;
     }
 
@@ -28,6 +31,9 @@ public class Caminhao{
     }
 
     public void setVelocidade(double velocidade) {
+        if (velocidade <= 0) {
+            throw new IllegalArgumentException("Velocidade deve ser maior que zero.");
+        }
         this.velocidade = velocidade;
     }
 
@@ -36,15 +42,21 @@ public class Caminhao{
     }
 
     public void setAutonomia(double autonomia) {
+        if (autonomia <= 0) {
+            throw new IllegalArgumentException("Autonomia deve ser maior que zero.");
+        }
         this.autonomia = autonomia;
     }
 
-    public double getCustoporKm() {
-        return custoporKm;
+    public double getCustoPorKm() {
+        return custoPorKm;
     }
 
-    public void setCustoporKm(double custoporKm) {
-        this.custoporKm = custoporKm;
+    public void setCustoPorKm(double custoPorKm) {
+        if (custoPorKm < 0) {
+            throw new IllegalArgumentException("Custo por Km não pode ser negativo.");
+        }
+        this.custoPorKm = custoPorKm;
     }
 
     public String getCodigo() {
@@ -52,13 +64,15 @@ public class Caminhao{
     }
 
     public void setCodigo(String codigo) {
+        if (codigo == null || codigo.trim().isEmpty()) {
+            throw new IllegalArgumentException("Código do caminhão não pode ser vazio.");
+        }
         this.codigo = codigo;
     }
 
     @Override
     public String toString() {
-        return "Caminhao [nome=" + nome + ", velocidade=" + velocidade + ", autonomia=" + autonomia + ", custoporKm="
-                + custoporKm + ", codigo=" + codigo + "]";
+        return String.format("Caminhao [nome=%s, velocidade=%.2f, autonomia=%.2f, custoPorKm=%.2f, codigo=%s]",
+                nome, velocidade, autonomia, custoPorKm, codigo);
     }
-
 }
