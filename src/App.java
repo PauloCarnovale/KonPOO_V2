@@ -43,7 +43,7 @@ public class App {
                         cadastrarNovaCarga();
                         break;
                     case 6:
-                        // consultarCargas();
+                        consultarCargas();
                         break;
                     case 7:
                         // alterarSituacaoCarga();
@@ -256,4 +256,28 @@ public class App {
                 .findFirst()
                 .orElse(null);
     }
+
+    private void consultarCargas() {
+        if (cargasPendentes == null || cargasPendentes.isEmpty()) {
+            System.out.println("Não há cargas pendentes cadastradas.");
+            return;
+        }
+
+        System.out.println("Lista de Cargas Pendentes:");
+        for (Carga carga : cargasPendentes) {
+            System.out.println("Código da Carga: " + carga.getCodigo());
+            System.out.println("Cliente: " + carga.getCliente().getNome());
+            System.out.println("Peso: " + carga.getPeso() + " toneladas");
+            System.out.println("Valor Declarado: R$ " + carga.getValorDeclarado());
+            System.out.println("Tempo Máximo para o Frete: " + carga.getTempoMaximo() + " dias");
+            System.out.println("Tipo de Carga: " + carga.getTipoCarga().getDescricao());
+            System.out.println("Origem: " + carga.getOrigem().getNome());
+            System.out.println("Destino: " + carga.getDestino().getNome());
+            String nomeCaminhao = carga.getCaminhaoDesignado() != null ? carga.getCaminhaoDesignado().getNome() : "Não Atribuído";
+            System.out.println("Caminhão Designado: " + nomeCaminhao);
+            System.out.println("-----------------------------------");
+        }
+    }
+
+
 }
