@@ -1,6 +1,6 @@
 package model;
 
-public class Carga {
+public class Frete {
     private int codigo;
     private int peso;
     private double valorDeclarado;
@@ -12,7 +12,7 @@ public class Carga {
     private String situacao;
     private Caminhao caminhaoDesignado;
 
-    public Carga(int codigo, int peso, double valorDeclarado, int tempoMaximo, Destino origem, Destino destino,
+    public Frete(int codigo, int peso, double valorDeclarado, int tempoMaximo, Destino origem, Destino destino,
                  TipoCarga tipoCarga, Cliente cliente, String situacao, Caminhao caminhaoDesignado) {
         this.codigo = codigo;
         this.peso = peso;

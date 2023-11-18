@@ -13,7 +13,7 @@ public class ServicoClientes {
     }
 
     private void inicializarClientes() {
-        listaClientes.add(new Cliente("CLT-1", "João Silva", "11 98765-4321", "12345678901"));
+        listaClientes.add(new Cliente("CLT-1", "Joao Silva", "11 98765-4321", "12345678901"));
         listaClientes.add(new Cliente("CLT-2", "Maria Oliveira", "21 98765-4321", "23456789012"));
         listaClientes.add(new Cliente("CLT-3", "Lucas Souza", "31 98765-4321", "34567890123"));
         listaClientes.add(new Cliente("CLT-4", "Ana Santos", "41 98765-4321", "45678901234"));

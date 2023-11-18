@@ -83,4 +83,36 @@ public class FileManager {
         }
     }
 
+    public void gravarTiposDeCargaCSV(String caminhoArquivoTiposCarga, List<TipoCarga> tiposDeCarga) {
+        try (FileWriter fwTiposCarga = new FileWriter(caminhoArquivoTiposCarga)) {
+            fwTiposCarga.append("Número, Descrição, Detalhes Específicos\n");
+            for (TipoCarga tipoCarga : tiposDeCarga) {
+                StringBuilder linha = new StringBuilder();
+                linha.append(tipoCarga.getNumero())
+                        .append(", ")
+                        .append(tipoCarga.getDescricao())
+                        .append(", ");
+
+                // Verifica se é Perecível ou Durável e adiciona informações específicas
+                if (tipoCarga instanceof TipoCarga.Perecivel) {
+                    TipoCarga.Perecivel perecivel = (TipoCarga.Perecivel) tipoCarga;
+                    linha.append("Origem: ").append(perecivel.getOrigem())
+                            .append(", Tempo Máx. Validade: ").append(perecivel.getTempoMaximoValidade())
+                            .append(", Temp. Armazenamento: ").append(perecivel.getTemperaturaArmazenamento())
+                            .append(", Requer Refrigeração: ").append(perecivel.isRequerRefrigeracao());
+                } else if (tipoCarga instanceof TipoCarga.Duravel) {
+                    TipoCarga.Duravel duravel = (TipoCarga.Duravel) tipoCarga;
+                    linha.append("Setor: ").append(duravel.getSetor())
+                            .append(", Material Principal: ").append(duravel.getMaterialPrincipal())
+                            .append(", Durabilidade Anos: ").append(duravel.getDurabilidadeAnos())
+                            .append(", Frágil: ").append(duravel.isFragil());
+                }
+
+                fwTiposCarga.append(linha.toString()).append("\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

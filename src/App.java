@@ -12,7 +12,7 @@ public class App {
     private List<Cliente> listaClientes;
     private List<Destino> destinos;
     private List<TipoCarga> tiposDeCarga = new ArrayList<>();
-    private Queue<Carga> cargasPendentes;
+    private Queue<Frete> cargasPendentes;
     private List<Itinerario> itinerarios = new ArrayList<>();
     private Scanner scanner = new Scanner(System.in);
 
@@ -22,7 +22,9 @@ public class App {
     ServicoClientes clientes = new ServicoClientes();
     ServicoMenu menu = new ServicoMenu();
     ServicoDestinos cidades = new ServicoDestinos();
+    ServicoCargas cargas = new ServicoCargas();
     FileManager fileManager = new FileManager();
+
 
 
 
@@ -31,6 +33,7 @@ public class App {
         this.listaCaminhoes = caminhoes.getListaCaminhoes();
         this.listaClientes = clientes.getListaClientes();
         this.destinos = cidades.getListaDestinos();
+        this.tiposDeCarga = cargas.getTiposDeCarga();
     }
 
     public void executarSistema(){
@@ -49,7 +52,7 @@ public class App {
                         cadastrarNovoCliente();
                         break;
                     case 4:
-                        // cadastrarNovoTipoDeCarga();
+                        cargas.cadastrarNovoTipoDeCarga();
                         break;
                     case 5:
                         cadastrarNovaCarga();
@@ -217,13 +220,13 @@ public class App {
 
         // Cria a nova carga
         // 'null' é passado para 'caminhaoDesignado' porque um caminhão ainda não foi atribuído à carga
-        Carga novaCarga = new Carga(codigo, peso, valorDeclarado, tempoMaximo, origem, destino, tipoCarga, cliente, "Pendente", null);
+        Frete novaFrete = new Frete(codigo, peso, valorDeclarado, tempoMaximo, origem, destino, tipoCarga, cliente, "Pendente", null);
 
         // Adiciona à fila de cargas pendentes
         if (cargasPendentes == null) {
             cargasPendentes = new LinkedList<>(); // Inicializa a fila se ainda não foi inicializada
         }
-        cargasPendentes.offer(novaCarga);
+        cargasPendentes.offer(novaFrete);
 
         System.out.println("Carga cadastrada com sucesso e adicionada à fila de pendências.");
     }
@@ -280,16 +283,16 @@ public class App {
         }
 
         System.out.println("Lista de Cargas Pendentes:");
-        for (Carga carga : cargasPendentes) {
-            System.out.println("Código da Carga: " + carga.getCodigo());
-            System.out.println("Cliente: " + carga.getCliente().getNome());
-            System.out.println("Peso: " + carga.getPeso() + " toneladas");
-            System.out.println("Valor Declarado: R$ " + carga.getValorDeclarado());
-            System.out.println("Tempo Máximo para o Frete: " + carga.getTempoMaximo() + " dias");
-            System.out.println("Tipo de Carga: " + carga.getTipoCarga().getDescricao());
-            System.out.println("Origem: " + carga.getOrigem().getSigla());
-            System.out.println("Destino: " + carga.getDestino().getSigla());
-            String nomeCaminhao = carga.getCaminhaoDesignado() != null ? carga.getCaminhaoDesignado().getNome() : "Não Atribuído";
+        for (Frete frete : cargasPendentes) {
+            System.out.println("Código da Carga: " + frete.getCodigo());
+            System.out.println("Cliente: " + frete.getCliente().getNome());
+            System.out.println("Peso: " + frete.getPeso() + " toneladas");
+            System.out.println("Valor Declarado: R$ " + frete.getValorDeclarado());
+            System.out.println("Tempo Máximo para o Frete: " + frete.getTempoMaximo() + " dias");
+            System.out.println("Tipo de Carga: " + frete.getTipoCarga().getDescricao());
+            System.out.println("Origem: " + frete.getOrigem().getSigla());
+            System.out.println("Destino: " + frete.getDestino().getSigla());
+            String nomeCaminhao = frete.getCaminhaoDesignado() != null ? frete.getCaminhaoDesignado().getNome() : "Não Atribuído";
             System.out.println("Caminhão Designado: " + nomeCaminhao);
             System.out.println("-----------------------------------");
         }
@@ -340,11 +343,14 @@ public class App {
         String caminhoArquivoClientes = "clientes.csv";
         String caminhoArquivoDestinos = "destinos.csv";
         String caminhoArquivoItinerarios = "itinerarios.csv";
+        String caminhoArquivoTiposCarga = "tiposCarga.csv";
 
         fileManager.gravarCaminhoesCSV(caminhoArquivoCaminhoes, listaCaminhoes);
         fileManager.gravarClientesCSV(caminhoArquivoClientes, listaClientes);
         fileManager.gravarDestinosCSV(caminhoArquivoDestinos, destinos);
         fileManager.gravarItinerariosCSV(caminhoArquivoItinerarios, itinerarios);
+        fileManager.gravarTiposDeCargaCSV(caminhoArquivoTiposCarga, cargas.getTiposDeCarga());
+
 
         System.out.println("Dados salvos em arquivos CSV.");
     }
