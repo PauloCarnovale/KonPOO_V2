@@ -43,13 +43,13 @@ public class App {
                 opcao = scanner.nextInt();
                 switch (opcao) {
                     case 1:
-                        cadastrarNovoDestino();
+                        cidades.cadastrarNovoDestino();
                         break;
                     case 2:
-                        cadastrarNovoCaminhao();
+                        caminhoes.cadastrarNovoCaminhao();
                         break;
                     case 3:
-                        cadastrarNovoCliente();
+                        clientes.cadastrarNovoCliente();
                         break;
                     case 4:
                         cargas.cadastrarNovoTipoDeCarga();
@@ -90,105 +90,6 @@ public class App {
             } while (opcao != 0);
             scanner.close(); // Importante fechar o Scanner quando não for mais usado
 
-    }
-
-    private void cadastrarNovoDestino() {
-        System.out.println("Cadastrar novo destino");
-
-        //Solicita os dados do destino
-        System.out.println("Informe o código do destino:");
-        int codigo = scanner.nextInt(); // Supõe que o usuário sempre digita uma string
-
-        // Verifica se já existe um destino com o mesmo código
-        for (Destino destino : destinos) {
-            if (destino.getCodigo() == codigo) {
-                System.out.println("Erro: Já existe um destino cadastrado com esse código.");
-                return; // Interrompe a execução se já existir
-            }
-        }
-
-        System.out.println("Informe o nome do destino:");
-        String nome = scanner.next().trim();
-
-        System.out.println("Informe a cidade de destino:");
-        String cidade = scanner.next().trim();
-
-    }
-
-    private void cadastrarNovoCaminhao() {
-        System.out.println("Cadastro de novo caminhão:");
-
-        // Solicita os dados do caminhão ao usuário
-        System.out.print("Informe o nome do caminhão: ");
-        String nome = scanner.next().trim();
-
-        // Verifica se já existe um caminhão com o mesmo nome
-        for (Caminhao c : listaCaminhoes) {
-            if (c.getNome().equalsIgnoreCase(nome)) {
-                System.out.println("Erro: Já existe um caminhão cadastrado com esse nome.");
-                return; // Interrompe a execução se já existir
-            }
-        }
-
-        // Continua o cadastro se o nome não existir
-        System.out.print("Informe a velocidade média do caminhão (km/h): ");
-        double velocidade = scanner.nextDouble();
-
-        System.out.print("Informe a autonomia do caminhão (km/l): ");
-        double autonomia = scanner.nextDouble();
-
-        System.out.print("Informe o custo por Km rodado: ");
-        double custoPorKm = scanner.nextDouble();
-
-        // Gera um código único para o novo caminhão
-        int codCaminhao = listaCaminhoes.size() + 1;
-
-        // Cria o novo caminhão e adiciona à lista
-        Caminhao novoCaminhao = new Caminhao(nome, velocidade, autonomia, custoPorKm, "TRK-"+codCaminhao);
-        listaCaminhoes.add(novoCaminhao);
-
-        // Ordena a lista pelo nome do caminhão
-        listaCaminhoes.sort(Comparator.comparing(Caminhao::getNome));
-
-        System.out.println("Caminhão cadastrado com sucesso!");
-    }
-
-
-    public void cadastrarNovoCliente() {
-        System.out.println("Cadastro de novo cliente:");
-
-        String cpf;
-        do {
-            System.out.print("Informe o CPF do cliente: ");
-            cpf = scanner.next().trim(); // Lê o CPF como String
-            if (!ServicoClientes.verificarCpf(cpf)) {
-                System.out.println("CPF inválido! Por favor, tente novamente.");
-            }
-        } while (!ServicoClientes.verificarCpf(cpf));
-
-        for (Cliente cliente : listaClientes) {
-            if (cliente.getCpf().equals(cpf)) {
-                System.out.println("CPF já cadastrado!");
-                return; // Encerra o método se o CPF já estiver cadastrado
-            }
-        }
-
-        // Continua o cadastro se o CPF não existir
-        System.out.print("Informe o nome do cliente: ");
-        scanner.nextLine(); // Consumir a linha restante após ler o número
-        String nome = scanner.nextLine(); // Agora lê a linha inteira
-
-        System.out.print("Informe o telefone do cliente: ");
-        String telefone = scanner.next().trim();
-
-        String codCliente = "CLT-" + (listaClientes.size() + 1);
-        Cliente novoCliente = new Cliente(codCliente, nome, telefone, cpf);
-        listaClientes.add(novoCliente);
-
-        // Ordena a lista pelo código do cliente
-        listaClientes.sort(Comparator.comparing(Cliente::getCod));
-
-        System.out.println("Cliente cadastrado com sucesso!");
     }
 
     public void cadastrarNovaCarga() {

@@ -3,11 +3,14 @@ package services;
 import model.Destino;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class ServicoDestinos {
     private List<Destino> listaDestinos = new ArrayList<>();
+    private Scanner scanner;
 
     public ServicoDestinos() {
+        scanner = new Scanner(System.in);
         inicializarDestinos();
     }
 
@@ -18,6 +21,26 @@ public class ServicoDestinos {
         listaDestinos.add(new Destino(4, "MG", "Belo Horizonte"));
         listaDestinos.add(new Destino(5, "RS", "Porto Alegre"));
     }
+
+    public void cadastrarNovoDestino() {
+        System.out.println("Cadastrar novo destino");
+
+        // Gera automaticamente o código do destino
+        int codigo = listaDestinos.size() + 1;
+
+        System.out.println("Informe o nome do destino:");
+        String nome = scanner.next().trim();
+
+        System.out.println("Informe a cidade de destino:");
+        String cidade = scanner.next().trim();
+
+        // Cria e adiciona o novo destino à lista
+        Destino novoDestino = new Destino(codigo, nome, cidade);
+        listaDestinos.add(novoDestino);
+
+        System.out.println("Destino cadastrado com sucesso!");
+    }
+
 
     public List<Destino> getListaDestinos() {
         return listaDestinos;

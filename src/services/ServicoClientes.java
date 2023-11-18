@@ -3,12 +3,15 @@ package services;
 import model.Cliente;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class ServicoClientes {
     private List<Cliente> listaClientes;
+    private Scanner scanner;
 
     public ServicoClientes() {
         listaClientes = new ArrayList<>();
+        scanner = new Scanner(System.in);
         inicializarClientes();
     }
 
@@ -20,9 +23,46 @@ public class ServicoClientes {
         listaClientes.add(new Cliente("CLT-5", "Pedro Costa", "51 98765-4321", "56789012345"));
     }
 
+
+    public void cadastrarNovoCliente() {
+        System.out.println("Cadastro de novo cliente:");
+
+        String cpf;
+        do {
+            System.out.print("Informe o CPF do cliente: ");
+            cpf = scanner.next().trim(); // Lê o CPF como String
+            if (!verificarCpf(cpf)) {
+                System.out.println("CPF inválido! Por favor, tente novamente.");
+            }
+        } while (!verificarCpf(cpf));
+
+        for (Cliente cliente : listaClientes) {
+            if (cliente.getCpf().equals(cpf)) {
+                System.out.println("CPF já cadastrado!");
+                return; // Encerra o método se o CPF já estiver cadastrado
+            }
+        }
+
+        // Continua o cadastro se o CPF não existir
+        System.out.print("Informe o nome do cliente: ");
+        scanner.nextLine(); // Consumir a linha restante após ler o número
+        String nome = scanner.nextLine();
+
+        System.out.print("Informe o telefone do cliente: ");
+        String telefone = scanner.next().trim();
+
+        String codCliente = "CLT-" + (listaClientes.size() + 1);
+        Cliente novoCliente = new Cliente(codCliente, nome, telefone, cpf);
+        listaClientes.add(novoCliente);
+
+        System.out.println("Cliente cadastrado com sucesso!");
+    }
+
     public List<Cliente> getListaClientes() {
         return listaClientes;
     }
+
+
 
 
     // Método para verificar a validade do CPF
