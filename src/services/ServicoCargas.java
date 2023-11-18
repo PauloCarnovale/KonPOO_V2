@@ -1,17 +1,24 @@
 package services;
 
-import model.TipoCarga;
-import java.util.ArrayList;
+import model.*;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Queue;
 
 public class ServicoCargas {
+    private Queue<Frete> cargasPendentes;
+    private ServicoClientes servicoClientes;
+    private ServicoDestinos servicoDestinos;
     private List<TipoCarga> tiposDeCarga;
     private Scanner scanner;
 
-    public ServicoCargas() {
-        tiposDeCarga = new ArrayList<>();
-        scanner = new Scanner(System.in);
+    public ServicoCargas(ServicoClientes servicoClientes, ServicoDestinos servicoDestinos, List<TipoCarga> tiposDeCarga) {
+        this.cargasPendentes = new LinkedList<>();
+        this.servicoClientes = servicoClientes;
+        this.servicoDestinos = servicoDestinos;
+        this.tiposDeCarga = tiposDeCarga;
+        this.scanner = new Scanner(System.in);
         inicializarTiposDeCarga();
     }
 
@@ -84,4 +91,59 @@ public class ServicoCargas {
     public List<TipoCarga> getTiposDeCarga() {
         return tiposDeCarga;
     }
+
+    public void cadastrarNovaCarga() {
+        System.out.println("Cadastro de nova carga:");
+
+        if (tiposDeCarga.isEmpty()) {
+            System.out.println("Não há tipos de carga cadastrados. Cadastre um tipo de carga primeiro.");
+            return; // Ou redirecionar para o cadastro de tipos de carga
+        }
+
+        // Exibir tipos de carga e selecionar
+        tiposDeCarga.forEach(tipo -> System.out.println("Número: " + tipo.getNumero() + ", Descrição: " + tipo.getDescricao()));
+        System.out.print("Escolha um tipo de carga pelo número: ");
+        int numeroTipoCarga = scanner.nextInt();
+        TipoCarga tipoCarga = tiposDeCarga.stream()
+                .filter(tipo -> tipo.getNumero() == numeroTipoCarga)
+                .findFirst()
+                .orElse(null);
+
+        if (tipoCarga == null) {
+            System.out.println("Tipo de carga não encontrado. Por favor, tente novamente.");
+            return;
+        }
+
+        System.out.print("Informe o código da carga: ");
+        int codigoCarga = scanner.nextInt();
+
+        // Verifica se já existe uma carga com o mesmo código
+        if (cargasPendentes.stream().anyMatch(c -> c.getCodigo() == codigoCarga)) {
+            System.out.println("Erro: Já existe uma carga cadastrada com esse código.");
+            return; // Interrompe a execução se já existir
+        }
+
+        System.out.print("Informe o peso da carga (em toneladas): ");
+        int peso = scanner.nextInt();
+
+        System.out.print("Informe o valor declarado da carga: ");
+        double valorDeclarado = scanner.nextDouble();
+
+        System.out.print("Informe o tempo máximo para o frete (em dias): ");
+        int tempoMaximo = scanner.nextInt();
+
+        Cliente cliente = servicoClientes.selecionarCliente();
+        Destino origem = servicoDestinos.selecionarDestino("origem");
+        Destino destino = servicoDestinos.selecionarDestino("destino");
+
+        Frete novaFrete = new Frete(codigoCarga, peso, valorDeclarado, tempoMaximo, origem, destino, tipoCarga, cliente, "Pendente", null);
+
+        cargasPendentes.offer(novaFrete);
+
+        System.out.println("Carga cadastrada com sucesso e adicionada à fila de pendências.");
+
+    }
+
+
+
 }

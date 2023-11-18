@@ -62,7 +62,20 @@ public class ServicoClientes {
         return listaClientes;
     }
 
+    public Cliente selecionarCliente() {
+        if (listaClientes.isEmpty()) {
+            System.out.println("Não há clientes cadastrados.");
+            return null;
+        }
 
+        listaClientes.forEach(cliente -> System.out.println("Código: " + cliente.getCod() + ", Nome: " + cliente.getNome()));
+        System.out.print("Escolha um cliente pelo código: ");
+        String codigo = scanner.next();
+        return listaClientes.stream()
+                .filter(cliente -> cliente.getCod().equals(codigo))
+                .findFirst()
+                .orElse(null);
+    }
 
 
     // Método para verificar a validade do CPF

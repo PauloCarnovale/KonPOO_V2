@@ -41,8 +41,25 @@ public class ServicoDestinos {
         System.out.println("Destino cadastrado com sucesso!");
     }
 
+    public Destino selecionarDestino(String tipo) {
+        if (listaDestinos.isEmpty()) {
+            System.out.println("Não há destinos cadastrados.");
+            return null;
+        }
+
+        listaDestinos.forEach(destino -> System.out.println("Código: " + destino.getCodigo() + ", Nome: " + destino.getSigla()));
+        System.out.print("Escolha o destino de " + tipo + " pelo código: ");
+        int codigo = scanner.nextInt();
+        return listaDestinos.stream()
+                .filter(destino -> destino.getCodigo() == codigo)
+                .findFirst()
+                .orElse(null);
+    }
+
 
     public List<Destino> getListaDestinos() {
         return listaDestinos;
     }
+
+
 }

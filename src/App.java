@@ -15,6 +15,7 @@ public class App {
     private Queue<Frete> cargasPendentes;
     private List<Itinerario> itinerarios = new ArrayList<>();
     private Scanner scanner = new Scanner(System.in);
+    private ServicoItinerario servicoItinerario;
 
 
     /* Instanciações das classes de serviço */
@@ -34,6 +35,9 @@ public class App {
         this.listaClientes = clientes.getListaClientes();
         this.destinos = cidades.getListaDestinos();
         this.tiposDeCarga = cargas.getTiposDeCarga();
+        this.cargas = new ServicoCargas(clientes, cidades, tiposDeCarga);
+        this.servicoItinerario = new ServicoItinerario(cidades);
+
     }
 
     public void executarSistema(){
@@ -55,7 +59,7 @@ public class App {
                         cargas.cadastrarNovoTipoDeCarga();
                         break;
                     case 5:
-                        cadastrarNovaCarga();
+                        cargas.cadastrarNovaCarga();
                         break;
                     case 6:
                         consultarCargas();
@@ -79,7 +83,7 @@ public class App {
                         imprimirCadastros();
                         break;
                     case 13:
-                        gerenciarItinerarios();
+                        servicoItinerario.gerenciarItinerarios();
                         break;
                     case 0:
                         System.out.println("Finalizando o sistema...");
@@ -90,76 +94,6 @@ public class App {
             } while (opcao != 0);
             scanner.close(); // Importante fechar o Scanner quando não for mais usado
 
-    }
-
-    public void cadastrarNovaCarga() {
-        System.out.println("Cadastro de nova carga:");
-
-        // Solicita os dados da carga ao usuário
-        System.out.print("Informe o código da carga: ");
-        int codigo = scanner.nextInt();
-
-        // Verifica se já existe uma carga com o mesmo código
-        if (cargasPendentes.stream().anyMatch(c -> c.getCodigo() == codigo)) {
-            System.out.println("Erro: Já existe uma carga cadastrada com esse código.");
-            return; // Interrompe a execução se já existir
-        }
-
-        System.out.print("Informe o peso da carga (em toneladas): ");
-        int peso = scanner.nextInt();
-
-        System.out.print("Informe o valor declarado da carga: ");
-        double valorDeclarado = scanner.nextDouble();
-
-        System.out.print("Informe o tempo máximo para o frete (em dias): ");
-        int tempoMaximo = scanner.nextInt();
-
-        Cliente cliente = selecionarCliente();
-        TipoCarga tipoCarga = selecionarTipoCarga();
-        Destino origem = selecionarDestino("origem");
-        Destino destino = selecionarDestino("destino");
-
-        // Cria a nova carga
-        // 'null' é passado para 'caminhaoDesignado' porque um caminhão ainda não foi atribuído à carga
-        Frete novaFrete = new Frete(codigo, peso, valorDeclarado, tempoMaximo, origem, destino, tipoCarga, cliente, "Pendente", null);
-
-        // Adiciona à fila de cargas pendentes
-        if (cargasPendentes == null) {
-            cargasPendentes = new LinkedList<>(); // Inicializa a fila se ainda não foi inicializada
-        }
-        cargasPendentes.offer(novaFrete);
-
-        System.out.println("Carga cadastrada com sucesso e adicionada à fila de pendências.");
-    }
-
-    private Cliente selecionarCliente() {
-        if (listaClientes.isEmpty()) {
-            System.out.println("Não há clientes cadastrados.");
-            return null;
-        }
-
-        listaClientes.forEach(cliente -> System.out.println("Código: " + cliente.getCod() + ", Nome: " + cliente.getNome()));
-        System.out.print("Escolha um cliente pelo código: ");
-        String codigo = scanner.next();
-        return listaClientes.stream()
-                .filter(cliente -> Objects.equals(cliente.getCod(), codigo))
-                .findFirst()
-                .orElse(null);
-    }
-
-    private TipoCarga selecionarTipoCarga() {
-        if (tiposDeCarga.isEmpty()) {
-            System.out.println("Não há tipos de carga cadastrados.");
-            return null;
-        }
-
-        tiposDeCarga.forEach(tipo -> System.out.println("Número: " + tipo.getNumero() + ", Descrição: " + tipo.getDescricao()));
-        System.out.print("Escolha um tipo de carga pelo número: ");
-        int numero = scanner.nextInt();
-        return tiposDeCarga.stream()
-                .filter(tipo -> tipo.getNumero() == numero)
-                .findFirst()
-                .orElse(null);
     }
 
     private Destino selecionarDestino(String tipo) {
@@ -199,45 +133,6 @@ public class App {
         }
     }
 
-    private void gerenciarItinerarios() {
-        System.out.println("Gerenciar Itinerários:");
-
-        if (destinos.isEmpty() || destinos.size() < 2) {
-            System.out.println("É necessário ter pelo menos dois destinos cadastrados para criar um itinerário.");
-            return;
-        }
-
-        // Seleciona a origem e o destino
-        System.out.println("Escolha o destino de origem:");
-        Destino origem = selecionarDestino("origem");
-        System.out.println("Escolha o destino de destino:");
-        Destino destino = selecionarDestino("destino");
-
-        // Procura se já existe itinerário cadastrado entre esses destinos
-        for (Itinerario itinerario : itinerarios) {
-            if (itinerario.getOrigem().equals(origem) && itinerario.getDestino().equals(destino)) {
-                System.out.println("Distância atual: " + itinerario.getDistancia() + " km. Deseja atualizar? (S/N)");
-                String resposta = scanner.next().trim();
-                if (resposta.equalsIgnoreCase("S")) {
-                    System.out.println("Informe a nova distância em km:");
-                    double novaDistancia = scanner.nextDouble();
-                    itinerario.setDistancia(novaDistancia);
-                    System.out.println("Distância atualizada com sucesso!");
-                }
-                return;
-            }
-        }
-
-        // Gera um código único para o novo itinerário
-        String codItinerario = "BR-" + (itinerarios.size() + 1);
-
-        // Caso não exista, cadastra um novo itinerário
-        System.out.println("Informe a distância em km entre os destinos:");
-        double distancia = scanner.nextDouble();
-        Itinerario novoItinerario = new Itinerario(codItinerario, origem, destino, distancia);
-        itinerarios.add(novoItinerario);
-        System.out.println("Itinerário cadastrado com sucesso!");
-    }
 
     private void imprimirCadastros() {
         String caminhoArquivoCaminhoes = "caminhoes.csv";
