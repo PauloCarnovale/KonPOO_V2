@@ -7,20 +7,29 @@ import model.*;
 
 public class App {
 
-    private List<Cliente> listaClientes = new ArrayList<>();
-    private List<Caminhao> listaCaminhoes = new ArrayList<>();
+    /* Declaração das listas */
+    private List<Caminhao> listaCaminhoes;
+    private List<Cliente> listaClientes;
+    private List<Destino> destinos;
     private List<TipoCarga> tiposDeCarga = new ArrayList<>();
-    private List<Destino> destinos = new ArrayList<>();
     private Queue<Carga> cargasPendentes;
     private List<Itinerario> itinerarios = new ArrayList<>();
     private Scanner scanner = new Scanner(System.in);
+
+
+    /* Instanciações das classes de serviço */
     ServicoCaminhoes caminhoes = new ServicoCaminhoes();
     ServicoClientes clientes = new ServicoClientes();
     ServicoMenu menu = new ServicoMenu();
+    ServicoDestinos cidades = new ServicoDestinos();
+
+
+
 
     public void inicializarSistema() {
-        caminhoes.inicializarCaminhoes();
-        clientes.inicializarClientes();
+        this.listaCaminhoes = caminhoes.getListaCaminhoes();
+        this.listaClientes = clientes.getListaClientes();
+        this.destinos = cidades.getListaDestinos();
     }
 
     public void executarSistema(){
@@ -301,9 +310,9 @@ public class App {
         // Procura se já existe itinerário cadastrado entre esses destinos
         for (Itinerario itinerario : itinerarios) {
             if (itinerario.getOrigem().equals(origem) && itinerario.getDestino().equals(destino)) {
-                System.out.println("Distância atual: " + itinerario.getDistancia() + " km. Deseja atualizar? (Sim/Não)");
+                System.out.println("Distância atual: " + itinerario.getDistancia() + " km. Deseja atualizar? (S/N)");
                 String resposta = scanner.next().trim();
-                if (resposta.equalsIgnoreCase("Sim")) {
+                if (resposta.equalsIgnoreCase("S")) {
                     System.out.println("Informe a nova distância em km:");
                     double novaDistancia = scanner.nextDouble();
                     itinerario.setDistancia(novaDistancia);

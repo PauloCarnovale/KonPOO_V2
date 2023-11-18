@@ -1,20 +1,18 @@
 package services;
 
 import model.Cliente;
-
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class ServicoClientes {
     private List<Cliente> listaClientes;
 
     public ServicoClientes() {
         listaClientes = new ArrayList<>();
-        //inicializarClientes();
+        inicializarClientes();
     }
 
-    public void inicializarClientes() {
+    private void inicializarClientes() {
         listaClientes.add(new Cliente("CLT-1", "João Silva", "11 98765-4321", "12345678901"));
         listaClientes.add(new Cliente("CLT-2", "Maria Oliveira", "21 98765-4321", "23456789012"));
         listaClientes.add(new Cliente("CLT-3", "Lucas Souza", "31 98765-4321", "34567890123"));
@@ -22,7 +20,9 @@ public class ServicoClientes {
         listaClientes.add(new Cliente("CLT-5", "Pedro Costa", "51 98765-4321", "56789012345"));
     }
 
-
+    public List<Cliente> getListaClientes() {
+        return listaClientes;
+    }
 
 
     // Método para verificar a validade do CPF

@@ -1,7 +1,6 @@
 package services;
 
 import model.Caminhao;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +12,7 @@ public class ServicoCaminhoes {
         inicializarCaminhoes();
     }
 
-    public void inicializarCaminhoes() {
+    private void inicializarCaminhoes() {
         listaCaminhoes.add(new Caminhao("Volvo FH16", 80, 10, 2.5, "TRK-1"));
         listaCaminhoes.add(new Caminhao("Scania R Series", 85, 8, 2.8, "TRK-2"));
         listaCaminhoes.add(new Caminhao("Mercedes-Benz Actros", 75, 12, 2.0, "TRK-3"));
@@ -21,7 +20,8 @@ public class ServicoCaminhoes {
         listaCaminhoes.add(new Caminhao("DAF XF", 88, 11, 2.7, "TRK-5"));
     }
 
-
-
+    public List<Caminhao> getListaCaminhoes() {
+        return listaCaminhoes;
+    }
 }
 
