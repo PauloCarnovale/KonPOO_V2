@@ -12,7 +12,7 @@ public class Itinerario {
         this.distancia = distancia;
         this.codigoItinerario = codigoItinerario;
     }
-    public String getCodigoItinerario() {
+    public String getCodigo() {
         return codigoItinerario;
     }
 

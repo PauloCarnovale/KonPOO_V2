@@ -22,6 +22,7 @@ public class App {
     ServicoClientes clientes = new ServicoClientes();
     ServicoMenu menu = new ServicoMenu();
     ServicoDestinos cidades = new ServicoDestinos();
+    FileManager fileManager = new FileManager();
 
 
 
@@ -73,6 +74,7 @@ public class App {
                         break;
                     case 12:
                         imprimirCadastros();
+                        break;
                     case 13:
                         gerenciarItinerarios();
                         break;
@@ -334,15 +336,17 @@ public class App {
     }
 
     private void imprimirCadastros() {
-        System.out.println("Dados dos Caminhões Cadastrados:");
-        for (Caminhao caminhao : listaCaminhoes) {
-            System.out.println(caminhao); // Usando o método toString de Caminhao
-        }
+        String caminhoArquivoCaminhoes = "caminhoes.csv";
+        String caminhoArquivoClientes = "clientes.csv";
+        String caminhoArquivoDestinos = "destinos.csv";
+        String caminhoArquivoItinerarios = "itinerarios.csv";
 
-        System.out.println("\nDados dos Clientes Cadastrados:");
-        for (Cliente cliente : listaClientes) {
-            System.out.println(cliente); // Usando o método toString de Cliente
-        }
+        fileManager.gravarCaminhoesCSV(caminhoArquivoCaminhoes, listaCaminhoes);
+        fileManager.gravarClientesCSV(caminhoArquivoClientes, listaClientes);
+        fileManager.gravarDestinosCSV(caminhoArquivoDestinos, destinos);
+        fileManager.gravarItinerariosCSV(caminhoArquivoItinerarios, itinerarios);
+
+        System.out.println("Dados salvos em arquivos CSV.");
     }
 
 
