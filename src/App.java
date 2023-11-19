@@ -14,20 +14,16 @@ public class App {
     private List<TipoCarga> tiposDeCarga = new ArrayList<>();
     private Queue<Frete> cargasPendentes;
     private List<Itinerario> itinerarios = new ArrayList<>();
-    private Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
     private ServicoItinerario servicoItinerario;
-
 
     /* Instanciações das classes de serviço */
     ServicoCaminhoes caminhoes = new ServicoCaminhoes();
     ServicoClientes clientes = new ServicoClientes();
     ServicoMenu menu = new ServicoMenu();
     ServicoDestinos cidades = new ServicoDestinos();
-    ServicoCargas cargas = new ServicoCargas();
+    ServicoCargas cargas = new ServicoCargas(clientes, cidades, tiposDeCarga);
     FileManager fileManager = new FileManager();
-
-
-
 
 
     public void inicializarSistema() {
@@ -92,24 +88,10 @@ public class App {
                         System.out.println("Opção inválida! Tente novamente.");
                 }
             } while (opcao != 0);
-            scanner.close(); // Importante fechar o Scanner quando não for mais usado
+            scanner.close(); // Fecha o Scanner
 
     }
 
-    private Destino selecionarDestino(String tipo) {
-        if (destinos.isEmpty()) {
-            System.out.println("Não há destinos cadastrados.");
-            return null;
-        }
-
-        destinos.forEach(destino -> System.out.println("Código: " + destino.getCodigo() + ", Nome: " + destino.getSigla()));
-        System.out.print("Escolha o destino de " + tipo + " pelo código: ");
-        int codigo = scanner.nextInt();
-        return destinos.stream()
-                .filter(destino -> destino.getCodigo() == codigo)
-                .findFirst()
-                .orElse(null);
-    }
 
     private void consultarCargas() {
         if (cargasPendentes == null || cargasPendentes.isEmpty()) {
