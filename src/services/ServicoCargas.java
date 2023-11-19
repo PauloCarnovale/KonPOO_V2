@@ -20,6 +20,8 @@ public class ServicoCargas {
         this.tiposDeCarga = tiposDeCarga;
         this.scanner = new Scanner(System.in);
         inicializarTiposDeCarga();
+        inicializarCargas();
+
     }
 
     private void inicializarTiposDeCarga() {
@@ -144,6 +146,72 @@ public class ServicoCargas {
 
     }
 
+    public void inicializarCargas() {
+        // Exemplo de inicialização de 5 cargas diferentes
+        if (!tiposDeCarga.isEmpty() && !servicoDestinos.getListaDestinos().isEmpty() && !servicoClientes.getListaClientes().isEmpty()) {
+            for (int i = 1; i <= 5; i++) {
+                TipoCarga tipoCarga = tiposDeCarga.get((i - 1) % tiposDeCarga.size());
+                Cliente cliente = servicoClientes.getListaClientes().get((i - 1) % servicoClientes.getListaClientes().size());
+                Destino origem = servicoDestinos.getListaDestinos().get(0); // assumindo que há pelo menos um destino
+                Destino destino = servicoDestinos.getListaDestinos().get(1); // assumindo que há pelo menos dois destinos
 
+                Frete novaCarga = new Frete(i, i * 1000, i * 100.0, i * 2, origem, destino, tipoCarga, cliente, "Pendente", null);
+                cargasPendentes.offer(novaCarga);
+            }
+        } else {
+            System.out.println("Não é possível inicializar cargas sem tipos de carga, destinos e clientes pré-definidos.");
+        }
+    }
+
+    public void exibirCodigoESituacaoDasCargas() {
+        if (cargasPendentes.isEmpty()) {
+            System.out.println("Não há cargas cadastradas.");
+        } else {
+            System.out.println("Código e Situação das cargas cadastradas:");
+            for (Frete carga : cargasPendentes) {
+                System.out.println("Código: " + carga.getCodigo() + " - Situação: " + carga.getSituacao());
+            }
+        }
+    }
+
+    public void alterarSituacaoCarga() {
+        System.out.print("Informe o código da carga que deseja alterar a situação: ");
+        int codigo = scanner.nextInt();
+        scanner.nextLine(); // Limpa o buffer do teclado
+
+        // Encontra a carga com o código especificado
+        Frete carga = cargasPendentes.stream()
+                .filter(c -> c.getCodigo() == codigo)
+                .findFirst()
+                .orElse(null);
+
+        if (carga != null) {
+            System.out.println("Carga encontrada: " + carga);
+            System.out.print("Informe a nova situação da carga (Pendente, Locada, Cancelada, Finalizada): ");
+            String novaSituacao = scanner.nextLine().trim();
+
+            switch (novaSituacao.toLowerCase()) {
+                case "pendente":
+                    // Implementar lógica se necessário
+                    carga.setSituacao("Pendente");
+                    break;
+                case "locada":
+                    carga.definirCaminhao();
+                    break;
+                case "cancelada":
+                    carga.cancelarCarga();
+                    break;
+                case "finalizada":
+                    carga.cargaEntregue();
+                    break;
+                default:
+                    System.out.println("Situacao inválida.");
+                    return;
+            }
+            System.out.println("Situação da carga atualizada para: " + novaSituacao);
+        } else {
+            System.out.println("Carga não encontrada com o código fornecido.");
+        }
+    }
 
 }

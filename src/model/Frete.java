@@ -26,6 +26,14 @@ public class Frete {
         this.caminhaoDesignado = caminhaoDesignado;
     }
 
+    public String getSituacao() {
+        return situacao;
+    }
+
+    public void setSituacao(String situacao) {
+        this.situacao = situacao;
+    }
+
     public int getCodigo() {
         return codigo;
     }

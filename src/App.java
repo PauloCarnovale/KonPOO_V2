@@ -61,7 +61,8 @@ public class App {
                         consultarCargas();
                         break;
                     case 7:
-                        // alterarSituacaoCarga();
+                        cargas.exibirCodigoESituacaoDasCargas();
+                        cargas.alterarSituacaoCarga();
                         break;
                     case 8:
                         // carregarDadosIniciais();
