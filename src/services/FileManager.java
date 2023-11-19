@@ -115,5 +115,21 @@ public class FileManager {
         }
     }
 
+    public void imprimirCadastros(List<Caminhao> caminhoes, List<Cliente> clientes, List<Destino> destinos, List<Itinerario> itinerarios, List<TipoCarga> tiposDeCarga) {
+        String caminhoArquivoCaminhoes = "caminhoes.csv";
+        String caminhoArquivoClientes = "clientes.csv";
+        String caminhoArquivoDestinos = "destinos.csv";
+        String caminhoArquivoItinerarios = "itinerarios.csv";
+        String caminhoArquivoTiposCarga = "tiposCarga.csv";
+
+        gravarCaminhoesCSV(caminhoArquivoCaminhoes, caminhoes);
+        gravarClientesCSV(caminhoArquivoClientes, clientes);
+        gravarDestinosCSV(caminhoArquivoDestinos, destinos);
+        gravarItinerariosCSV(caminhoArquivoItinerarios, itinerarios);
+        gravarTiposDeCargaCSV(caminhoArquivoTiposCarga, tiposDeCarga);
+
+        System.out.println("Dados salvos em arquivos CSV.");
+    }
+
 
 }

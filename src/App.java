@@ -16,6 +16,8 @@ public class App {
     private List<Itinerario> itinerarios = new ArrayList<>();
     private final Scanner scanner = new Scanner(System.in);
     private ServicoItinerario servicoItinerario;
+    private ServicoFretes servicoFretes;
+    private ServicoCargas servicoCargas;
 
     /* Instanciações das classes de serviço */
     ServicoCaminhoes caminhoes = new ServicoCaminhoes();
@@ -58,7 +60,7 @@ public class App {
                         cargas.cadastrarNovaCarga();
                         break;
                     case 6:
-                        consultarCargas();
+                        servicoCargas.consultarCargas();
                         break;
                     case 7:
                         cargas.exibirCodigoESituacaoDasCargas();
@@ -68,7 +70,7 @@ public class App {
                         // carregarDadosIniciais();
                         break;
                     case 9:
-                        // fretarCargas();
+                        servicoFretes.fretarCargas();
                         break;
                     case 10:
                         // salvarDados();
@@ -77,7 +79,7 @@ public class App {
                         // carregarDados();
                         break;
                     case 12:
-                        imprimirCadastros();
+                        fileManager.imprimirCadastros(listaCaminhoes, listaClientes, destinos, itinerarios, servicoCargas.getTiposDeCarga());
                         break;
                     case 13:
                         servicoItinerario.gerenciarItinerarios();
@@ -92,47 +94,4 @@ public class App {
             scanner.close(); // Fecha o Scanner
 
     }
-
-
-    private void consultarCargas() {
-        if (cargasPendentes == null || cargasPendentes.isEmpty()) {
-            System.out.println("Não há cargas pendentes cadastradas.");
-            return;
-        }
-
-        System.out.println("Lista de Cargas Pendentes:");
-        for (Frete frete : cargasPendentes) {
-            System.out.println("Código da Carga: " + frete.getCodigo());
-            System.out.println("Cliente: " + frete.getCliente().getNome());
-            System.out.println("Peso: " + frete.getPeso() + " toneladas");
-            System.out.println("Valor Declarado: R$ " + frete.getValorDeclarado());
-            System.out.println("Tempo Máximo para o Frete: " + frete.getTempoMaximo() + " dias");
-            System.out.println("Tipo de Carga: " + frete.getTipoCarga().getDescricao());
-            System.out.println("Origem: " + frete.getOrigem().getSigla());
-            System.out.println("Destino: " + frete.getDestino().getSigla());
-            String nomeCaminhao = frete.getCaminhaoDesignado() != null ? frete.getCaminhaoDesignado().getNome() : "Não Atribuído";
-            System.out.println("Caminhão Designado: " + nomeCaminhao);
-            System.out.println("-----------------------------------");
-        }
-    }
-
-
-    private void imprimirCadastros() {
-        String caminhoArquivoCaminhoes = "caminhoes.csv";
-        String caminhoArquivoClientes = "clientes.csv";
-        String caminhoArquivoDestinos = "destinos.csv";
-        String caminhoArquivoItinerarios = "itinerarios.csv";
-        String caminhoArquivoTiposCarga = "tiposCarga.csv";
-
-        fileManager.gravarCaminhoesCSV(caminhoArquivoCaminhoes, listaCaminhoes);
-        fileManager.gravarClientesCSV(caminhoArquivoClientes, listaClientes);
-        fileManager.gravarDestinosCSV(caminhoArquivoDestinos, destinos);
-        fileManager.gravarItinerariosCSV(caminhoArquivoItinerarios, itinerarios);
-        fileManager.gravarTiposDeCargaCSV(caminhoArquivoTiposCarga, cargas.getTiposDeCarga());
-
-
-        System.out.println("Dados salvos em arquivos CSV.");
-    }
-
-
 }

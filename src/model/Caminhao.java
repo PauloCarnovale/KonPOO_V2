@@ -6,6 +6,8 @@ public class Caminhao {
     private double autonomia;
     private double custoPorKm;
     private String codigo;
+    private boolean disponivel;
+    private int capacidadeMaxima;
 
     public Caminhao(String nome, double velocidade, double autonomia, double custoPorKm, String codigo) {
         setNome(nome);
@@ -15,6 +17,16 @@ public class Caminhao {
         setCodigo(codigo);
     }
 
+    // Método para verificar se o caminhão está disponível
+    public boolean estaDisponivel() {
+        return disponivel;
+    }
+
+    // Método para verificar se o caminhão pode transportar a carga
+    public boolean podeTransportar(Frete carga) {
+        // verificar se o peso da carga é menor ou igual à capacidade máxima do caminhão
+        return carga.getPeso() <= capacidadeMaxima;
+    }
     public String getNome() {
         return nome;
     }

@@ -214,4 +214,25 @@ public class ServicoCargas {
         }
     }
 
+    public void consultarCargas() {
+        if (cargasPendentes.isEmpty()) {
+            System.out.println("Não há cargas pendentes cadastradas.");
+            return;
+        }
+
+        System.out.println("Lista de Cargas Pendentes:");
+        for (Frete frete : cargasPendentes) {
+            System.out.println("Código da Carga: " + frete.getCodigo());
+            System.out.println("Cliente: " + (frete.getCliente() != null ? frete.getCliente().getNome() : "Cliente não atribuído"));
+            System.out.println("Peso: " + frete.getPeso() + " toneladas");
+            System.out.println("Valor Declarado: R$ " + frete.getValorDeclarado());
+            System.out.println("Tempo Máximo para o Frete: " + frete.getTempoMaximo() + " dias");
+            System.out.println("Tipo de Carga: " + (frete.getTipoCarga() != null ? frete.getTipoCarga().getDescricao() : "Tipo de carga não atribuído"));
+            System.out.println("Origem: " + (frete.getOrigem() != null ? frete.getOrigem().getSigla() : "Origem não atribuída"));
+            System.out.println("Destino: " + (frete.getDestino() != null ? frete.getDestino().getSigla() : "Destino não atribuído"));
+            String nomeCaminhao = frete.getCaminhaoDesignado() != null ? frete.getCaminhaoDesignado().getNome() : "Não Atribuído";
+            System.out.println("Caminhão Designado: " + nomeCaminhao);
+            System.out.println("-----------------------------------");
+        }
+    }
 }
