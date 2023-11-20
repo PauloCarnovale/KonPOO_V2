@@ -9,7 +9,7 @@ public class ServicoMenu {
         System.out.println("5. Cadastrar nova carga");
         System.out.println("6. Consultar todas as cargas");
         System.out.println("7. Alterar a situação de uma carga");
-        System.out.println("8. Carregar dados iniciais");
+        System.out.println("8. Inicializar Sistema");
         System.out.println("9. Fretar cargas");
         System.out.println("10. Salvar dados");
         System.out.println("11. Carregar dados");

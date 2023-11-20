@@ -12,7 +12,6 @@ public class App {
     private List<Cliente> listaClientes;
     private List<Destino> destinos;
     private List<TipoCarga> tiposDeCarga = new ArrayList<>();
-    private Queue<Frete> cargasPendentes;
     private List<Itinerario> itinerarios = new ArrayList<>();
     private final Scanner scanner = new Scanner(System.in);
     private ServicoItinerario servicoItinerario;
@@ -33,7 +32,7 @@ public class App {
         this.listaClientes = clientes.getListaClientes();
         this.destinos = cidades.getListaDestinos();
         this.tiposDeCarga = cargas.getTiposDeCarga();
-        this.cargas = new ServicoCargas(clientes, cidades, tiposDeCarga);
+        this.servicoCargas = new ServicoCargas(clientes, cidades, tiposDeCarga);
         this.servicoItinerario = new ServicoItinerario(cidades);
 
     }
@@ -67,19 +66,25 @@ public class App {
                         cargas.alterarSituacaoCarga();
                         break;
                     case 8:
-                        // carregarDadosIniciais();
+                        inicializarSistema();
                         break;
                     case 9:
                         servicoFretes.fretarCargas();
                         break;
                     case 10:
-                        // salvarDados();
+                        fileManager.imprimirCadastros(listaCaminhoes, listaClientes, destinos, itinerarios, servicoCargas.getTiposDeCarga());
                         break;
                     case 11:
-                        // carregarDados();
+                        String caminhoArquivo = "dadosiniciais.csv";
+                        SistemaData dadosCarregados = fileManager.carregarDados(caminhoArquivo);
+                        if (dadosCarregados != null) {
+                            this.listaCaminhoes = dadosCarregados.getCaminhoes();
+                            this.listaClientes = dadosCarregados.getClientes();
+                            this.destinos = dadosCarregados.getDestinos();
+                            this.tiposDeCarga = dadosCarregados.getTiposDeCarga();
+                        }
                         break;
                     case 12:
-                        fileManager.imprimirCadastros(listaCaminhoes, listaClientes, destinos, itinerarios, servicoCargas.getTiposDeCarga());
                         break;
                     case 13:
                         servicoItinerario.gerenciarItinerarios();

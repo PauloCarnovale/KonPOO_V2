@@ -1,9 +1,13 @@
 package services;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import model.*;
+
 
 public class FileManager {
 
@@ -116,19 +120,108 @@ public class FileManager {
     }
 
     public void imprimirCadastros(List<Caminhao> caminhoes, List<Cliente> clientes, List<Destino> destinos, List<Itinerario> itinerarios, List<TipoCarga> tiposDeCarga) {
-        String caminhoArquivoCaminhoes = "caminhoes.csv";
-        String caminhoArquivoClientes = "clientes.csv";
-        String caminhoArquivoDestinos = "destinos.csv";
-        String caminhoArquivoItinerarios = "itinerarios.csv";
-        String caminhoArquivoTiposCarga = "tiposCarga.csv";
+        try {
+            if (caminhoes.isEmpty() || clientes.isEmpty() || destinos.isEmpty() || itinerarios.isEmpty() || tiposDeCarga.isEmpty()) {
+                throw new IllegalStateException("Uma ou mais listas estão vazias.");
+            }
 
-        gravarCaminhoesCSV(caminhoArquivoCaminhoes, caminhoes);
-        gravarClientesCSV(caminhoArquivoClientes, clientes);
-        gravarDestinosCSV(caminhoArquivoDestinos, destinos);
-        gravarItinerariosCSV(caminhoArquivoItinerarios, itinerarios);
-        gravarTiposDeCargaCSV(caminhoArquivoTiposCarga, tiposDeCarga);
+            String caminhoArquivoCaminhoes = "caminhoes.csv";
+            String caminhoArquivoClientes = "clientes.csv";
+            String caminhoArquivoDestinos = "destinos.csv";
+            String caminhoArquivoItinerarios = "itinerarios.csv";
+            String caminhoArquivoTiposCarga = "tiposCarga.csv";
 
-        System.out.println("Dados salvos em arquivos CSV.");
+            gravarCaminhoesCSV(caminhoArquivoCaminhoes, caminhoes);
+            gravarClientesCSV(caminhoArquivoClientes, clientes);
+            gravarDestinosCSV(caminhoArquivoDestinos, destinos);
+            gravarItinerariosCSV(caminhoArquivoItinerarios, itinerarios);
+            gravarTiposDeCargaCSV(caminhoArquivoTiposCarga, tiposDeCarga);
+
+            System.out.println("Dados salvos em arquivos CSV.");
+        } catch (IllegalStateException e) {
+            System.out.println("Erro ao imprimir cadastros: " + e.getMessage());
+        }
+    }
+
+    public SistemaData carregarDados(String arquivo) {
+        List<Caminhao> caminhoes = new ArrayList<>();
+        List<Cliente> clientes = new ArrayList<>();
+        List<Destino> destinos = new ArrayList<>();
+        List<TipoCarga> tiposDeCarga = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(arquivo))) {
+            String linha;
+            String secaoAtual = "";
+
+            while ((linha = reader.readLine()) != null) {
+                if (linha.isEmpty()) continue;
+
+                // Verificar se estamos mudando de seção
+                if (linha.equals("caminhoes") || linha.equals("clientes") || linha.equals("destinos") ||
+                        linha.equals("tiposdecarga")) {
+                    secaoAtual = linha;
+                    continue;
+                }
+
+                switch (secaoAtual) {
+                    case "caminhoes":
+                        caminhoes.add(parseCaminhao(linha));
+                        break;
+                    case "clientes":
+                        clientes.add(parseCliente(linha));
+                        break;
+                    case "destinos":
+                        destinos.add(parseDestino(linha));
+                        break;
+                    case "tiposdecarga":
+                        tiposDeCarga.add(parseTipoCarga(linha));
+                        break;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return new SistemaData(caminhoes, clientes, destinos, tiposDeCarga);
+    }
+
+    private Caminhao parseCaminhao(String linha) {
+        String[] dados = linha.split(", ");
+        String nome = dados[0];
+        double velocidade = Double.parseDouble(dados[1]);
+        double autonomia = Double.parseDouble(dados[2]);
+        double custoPorKm = Double.parseDouble(dados[3]);
+        String identificador = dados[4];
+
+        return new Caminhao(nome, velocidade, autonomia, custoPorKm, identificador);
+    }
+
+    private Cliente parseCliente(String linha) {
+        String[] dados = linha.split(", ");
+        String nome = dados[0];
+        String telefone = dados[1];
+        String cpf = dados[2];
+        String codigo = dados[3];
+
+        return new Cliente(codigo, nome, telefone, cpf);
+    }
+
+    private Destino parseDestino(String linha) {
+        String[] dados = linha.split(", ");
+        int codigo = Integer.parseInt(dados[0]);
+        String sigla = dados[1];
+        String cidade = dados[2];
+
+        return new Destino(codigo, sigla, cidade);
+    }
+
+    private TipoCarga parseTipoCarga(String linha) {
+        String[] dados = linha.split(", ");
+        int numero = Integer.parseInt(dados[0]);
+        String descricao = dados[1];
+
+        // Exemplo genérico, ajuste conforme a estrutura de suas subclasses de TipoCarga
+        return new TipoCarga(numero, descricao);
     }
 
 
