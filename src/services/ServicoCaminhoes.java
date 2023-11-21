@@ -25,6 +25,11 @@ public class ServicoCaminhoes {
     }
 
     public void cadastrarNovoCaminhao() {
+        System.out.println("Caminhões cadastrados:");
+        for (Caminhao caminhao : listaCaminhoes) {
+            System.out.println("Nome: " + caminhao.getNome() + ", Velocidade: " + caminhao.getVelocidade() + " km/h, Autonomia: " + caminhao.getAutonomia() + " km/l, Custo por Km: " + caminhao.getCustoPorKm() + ", Código: " + caminhao.getCodigo());
+        }
+        
         System.out.println("Cadastro de novo caminhão:");
 
         // Solicita os dados do caminhão ao usuário

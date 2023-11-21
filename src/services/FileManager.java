@@ -150,7 +150,7 @@ public class FileManager {
     }
 
 
-    public void imprimirCadastros(List<Caminhao> caminhoes, List<Cliente> clientes, List<Destino> destinos, List<Itinerario> itinerarios, List<TipoCarga> tiposDeCarga, Queue<Frete> cargasPendentes) {
+    public void imprimirCadastros(List<Caminhao> caminhoes, List<Cliente> clientes, List<Destino> destinos, List<Itinerario> itinerarios, List<TipoCarga> tiposDeCarga) {
         try {
             if (caminhoes.isEmpty() || clientes.isEmpty() || destinos.isEmpty() || itinerarios.isEmpty() || tiposDeCarga.isEmpty()) {
                 throw new IllegalStateException("Uma ou mais listas estão vazias.");
@@ -161,14 +161,14 @@ public class FileManager {
             String caminhoArquivoDestinos = "destinos.csv";
             String caminhoArquivoItinerarios = "itinerarios.csv";
             String caminhoArquivoTiposCarga = "tiposCarga.csv";
-            String caminhoArquivoFretes = "fretes.csv";
+
 
             gravarCaminhoesCSV(caminhoArquivoCaminhoes, caminhoes);
             gravarClientesCSV(caminhoArquivoClientes, clientes);
             gravarDestinosCSV(caminhoArquivoDestinos, destinos);
             gravarItinerariosCSV(caminhoArquivoItinerarios, itinerarios);
             gravarTiposDeCargaCSV(caminhoArquivoTiposCarga, tiposDeCarga);
-            gravarFretesCSV(caminhoArquivoFretes, cargasPendentes);
+
 
             System.out.println("Dados salvos em arquivos CSV.");
         } catch (IllegalStateException e) {

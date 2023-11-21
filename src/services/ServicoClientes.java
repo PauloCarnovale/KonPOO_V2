@@ -25,6 +25,11 @@ public class ServicoClientes {
 
 
     public void cadastrarNovoCliente() {
+        System.out.println("Clientes cadastrados:");
+        for (Cliente cliente : listaClientes) {
+            System.out.println("CPF: " + cliente.getCpf() + ", Nome: " + cliente.getNome() + ", Telefone: " + cliente.getTelefone() + ", Código: " + cliente.getCod());
+        }
+
         System.out.println("Cadastro de novo cliente:");
 
         String cpf;

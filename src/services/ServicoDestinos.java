@@ -23,19 +23,24 @@ public class ServicoDestinos {
     }
 
     public void cadastrarNovoDestino() {
+        System.out.println("Destinos cadastrados:");
+        for (Destino destino : listaDestinos) {
+            System.out.println("Código: " + destino.getCodigo() + ", Estado: "+ destino.getSigla() + ", Cidade: " + destino.getCidade());
+        }
+
         System.out.println("Cadastrar novo destino");
 
         // Gera automaticamente o código do destino
         int codigo = listaDestinos.size() + 1;
 
-        System.out.println("Informe o nome do destino:");
-        String nome = scanner.next().trim();
+        System.out.println("Informe a sigla do estado:");
+        String siglaCidade = scanner.next().trim();
 
         System.out.println("Informe a cidade de destino:");
-        String cidade = scanner.next().trim();
+        String nomeCidade = scanner.next().trim();
 
         // Cria e adiciona o novo destino à lista
-        Destino novoDestino = new Destino(codigo, nome, cidade);
+        Destino novoDestino = new Destino(codigo, siglaCidade, nomeCidade);
         listaDestinos.add(novoDestino);
 
         System.out.println("Destino cadastrado com sucesso!");

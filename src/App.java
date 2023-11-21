@@ -17,7 +17,6 @@ public class App {
     private ServicoItinerario servicoItinerario;
     private ServicoFretes servicoFretes;
     private ServicoCargas servicoCargas;
-    Queue<Frete> cargasPendentes = servicoCargas.getCargasPendentes();
 
     /* Instanciações das classes de serviço */
     ServicoCaminhoes caminhoes = new ServicoCaminhoes();
@@ -25,6 +24,7 @@ public class App {
     ServicoMenu menu = new ServicoMenu();
     ServicoDestinos cidades = new ServicoDestinos();
     ServicoCargas cargas = new ServicoCargas(clientes, cidades, tiposDeCarga);
+
     FileManager fileManager = new FileManager();
 
 
@@ -35,6 +35,8 @@ public class App {
         this.tiposDeCarga = cargas.getTiposDeCarga();
         this.servicoCargas = new ServicoCargas(clientes, cidades, tiposDeCarga);
         this.servicoItinerario = new ServicoItinerario(cidades);
+
+
     }
 
     public void executarSistema(){
@@ -72,7 +74,7 @@ public class App {
                         servicoFretes.fretarCargas();
                         break;
                     case 10:
-                        fileManager.imprimirCadastros(listaCaminhoes, listaClientes, destinos, itinerarios, tiposDeCarga, cargasPendentes);
+                        fileManager.imprimirCadastros(listaCaminhoes, listaClientes, destinos, itinerarios, tiposDeCarga);
                         break;
                     case 11:
                         carregaDados();
