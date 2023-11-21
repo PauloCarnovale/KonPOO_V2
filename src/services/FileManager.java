@@ -6,6 +6,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
+
 import model.*;
 
 
@@ -119,7 +121,36 @@ public class FileManager {
         }
     }
 
-    public void imprimirCadastros(List<Caminhao> caminhoes, List<Cliente> clientes, List<Destino> destinos, List<Itinerario> itinerarios, List<TipoCarga> tiposDeCarga) {
+    public void gravarFretesCSV(String caminhoArquivoFretes, Queue<Frete> cargasPendentes) {
+        try (FileWriter fwFretes = new FileWriter(caminhoArquivoFretes)) {
+            fwFretes.append("Codigo, Peso, ValorDeclarado, TempoMaximo, Origem, Destino, TipoCarga, Cliente, Situacao\n");
+            for (Frete frete : cargasPendentes) {
+                fwFretes.append(String.valueOf(frete.getCodigo())) // Converta para String
+                        .append(", ")
+                        .append(String.valueOf(frete.getPeso())) // Converta para String
+                        .append(", ")
+                        .append(String.valueOf(frete.getValorDeclarado())) // Converta para String
+                        .append(", ")
+                        .append(String.valueOf(frete.getTempoMaximo())) // Converta para String
+                        .append(", ")
+                        .append(frete.getOrigem().getSigla())
+                        .append(", ")
+                        .append(frete.getDestino().getSigla())
+                        .append(", ")
+                        .append(frete.getTipoCarga().getDescricao())
+                        .append(", ")
+                        .append(frete.getCliente().getNome())
+                        .append(", ")
+                        .append(frete.getSituacao())
+                        .append("\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void imprimirCadastros(List<Caminhao> caminhoes, List<Cliente> clientes, List<Destino> destinos, List<Itinerario> itinerarios, List<TipoCarga> tiposDeCarga, Queue<Frete> cargasPendentes) {
         try {
             if (caminhoes.isEmpty() || clientes.isEmpty() || destinos.isEmpty() || itinerarios.isEmpty() || tiposDeCarga.isEmpty()) {
                 throw new IllegalStateException("Uma ou mais listas estão vazias.");
@@ -130,12 +161,14 @@ public class FileManager {
             String caminhoArquivoDestinos = "destinos.csv";
             String caminhoArquivoItinerarios = "itinerarios.csv";
             String caminhoArquivoTiposCarga = "tiposCarga.csv";
+            String caminhoArquivoFretes = "fretes.csv";
 
             gravarCaminhoesCSV(caminhoArquivoCaminhoes, caminhoes);
             gravarClientesCSV(caminhoArquivoClientes, clientes);
             gravarDestinosCSV(caminhoArquivoDestinos, destinos);
             gravarItinerariosCSV(caminhoArquivoItinerarios, itinerarios);
             gravarTiposDeCargaCSV(caminhoArquivoTiposCarga, tiposDeCarga);
+            gravarFretesCSV(caminhoArquivoFretes, cargasPendentes);
 
             System.out.println("Dados salvos em arquivos CSV.");
         } catch (IllegalStateException e) {

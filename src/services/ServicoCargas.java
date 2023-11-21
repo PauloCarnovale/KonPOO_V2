@@ -235,4 +235,7 @@ public class ServicoCargas {
             System.out.println("-----------------------------------");
         }
     }
+    public Queue<Frete> getCargasPendentes() {
+        return cargasPendentes;
+    }
 }

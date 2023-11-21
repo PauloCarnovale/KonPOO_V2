@@ -6,7 +6,7 @@ import java.awt.*;
 public class ServicoGUI {
 
     public ServicoGUI() {
-        // Criar o frame principal
+        // Frame principal
         JFrame frame = new JFrame("Sistema de Gerenciamento de Cargas");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 600);
@@ -16,7 +16,7 @@ public class ServicoGUI {
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.anchor = GridBagConstraints.CENTER;
 
-        // Criar e adicionar as listas suspensas
+        //Adiciona as listas suspensas
         String[] cadastroOptions = {"Opção 1", "Opção 2", "Opção 3"};
         JComboBox<String> cbCadastro = new JComboBox<>(cadastroOptions);
 
@@ -34,7 +34,7 @@ public class ServicoGUI {
         frame.add(cbFrete, gbc);
         frame.add(cbOutros, gbc);
 
-        // Configurar a visibilidade do frame
+        // Configura a visibilidade do frame
         frame.setVisible(true);
     }
 

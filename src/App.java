@@ -17,6 +17,7 @@ public class App {
     private ServicoItinerario servicoItinerario;
     private ServicoFretes servicoFretes;
     private ServicoCargas servicoCargas;
+    Queue<Frete> cargasPendentes = servicoCargas.getCargasPendentes();
 
     /* Instanciações das classes de serviço */
     ServicoCaminhoes caminhoes = new ServicoCaminhoes();
@@ -34,7 +35,6 @@ public class App {
         this.tiposDeCarga = cargas.getTiposDeCarga();
         this.servicoCargas = new ServicoCargas(clientes, cidades, tiposDeCarga);
         this.servicoItinerario = new ServicoItinerario(cidades);
-
     }
 
     public void executarSistema(){
@@ -72,17 +72,10 @@ public class App {
                         servicoFretes.fretarCargas();
                         break;
                     case 10:
-                        fileManager.imprimirCadastros(listaCaminhoes, listaClientes, destinos, itinerarios, servicoCargas.getTiposDeCarga());
+                        fileManager.imprimirCadastros(listaCaminhoes, listaClientes, destinos, itinerarios, tiposDeCarga, cargasPendentes);
                         break;
                     case 11:
-                        String caminhoArquivo = "dadosiniciais.csv";
-                        SistemaData dadosCarregados = fileManager.carregarDados(caminhoArquivo);
-                        if (dadosCarregados != null) {
-                            this.listaCaminhoes = dadosCarregados.getCaminhoes();
-                            this.listaClientes = dadosCarregados.getClientes();
-                            this.destinos = dadosCarregados.getDestinos();
-                            this.tiposDeCarga = dadosCarregados.getTiposDeCarga();
-                        }
+                        carregaDados();
                         break;
                     case 12:
                         break;
@@ -98,5 +91,16 @@ public class App {
             } while (opcao != 0);
             scanner.close(); // Fecha o Scanner
 
+    }
+
+    private void carregaDados(){
+        String caminhoArquivo = "dadosiniciais.csv";
+        SistemaData dadosCarregados = fileManager.carregarDados(caminhoArquivo);
+        if (dadosCarregados != null) {
+            this.listaCaminhoes = dadosCarregados.getCaminhoes();
+            this.listaClientes = dadosCarregados.getClientes();
+            this.destinos = dadosCarregados.getDestinos();
+            this.tiposDeCarga = dadosCarregados.getTiposDeCarga();
+        }
     }
 }
