@@ -50,7 +50,7 @@ public class ServicoClientes {
 
         // Continua o cadastro se o CPF não existir
         System.out.print("Informe o nome do cliente: ");
-        scanner.nextLine(); // Consumir a linha restante após ler o número
+        scanner.nextLine(); // Limpa o buffer
         String nome = scanner.nextLine();
 
         System.out.print("Informe o telefone do cliente: ");

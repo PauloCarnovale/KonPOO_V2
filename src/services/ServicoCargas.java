@@ -21,26 +21,6 @@ public class ServicoCargas {
         this.tiposDeCarga = tiposDeCarga;
         this.servicoCaminhoes = servicoCaminhoes;
         this.scanner = new Scanner(System.in);
-        //inicializarTiposDeCarga();
-        //inicializarCargas();
-
-    }
-
-    private void inicializarTiposDeCarga() {
-        TipoCarga.Perecivel perecivel = new TipoCarga.Perecivel(1, "Carga Perecível", "Brasil", 5, 4.0, true);
-        tiposDeCarga.add(perecivel);
-
-        TipoCarga.Duravel duravel = new TipoCarga.Duravel(2, "Carga Durável", "Eletrônicos", "Metal", 10, false);
-        tiposDeCarga.add(duravel);
-
-        TipoCarga.Perecivel farmaceuticos = new TipoCarga.Perecivel(3, "Produtos Farmacêuticos", "Índia", 15, 2.5, true);
-        tiposDeCarga.add(farmaceuticos);
-
-        TipoCarga.Duravel moveis = new TipoCarga.Duravel(4, "Móveis", "Decoração", "Madeira", 20, false);
-        tiposDeCarga.add(moveis);
-
-        TipoCarga.Perecivel congelados = new TipoCarga.Perecivel(5, "Produtos Congelados", "Noruega", 30, -18.0, true);
-        tiposDeCarga.add(congelados);
     }
 
     public void cadastrarNovaCarga() {
@@ -76,25 +56,6 @@ public class ServicoCargas {
         // Adiciona a carga na fila de cargas pendentes.
         cargasPendentes.add(novaCarga);
         System.out.println("Carga cadastrada com sucesso e status definido como 'Pendente'.");
-    }
-
-
-
-    public void inicializarCargas() {
-        // Exemplo de inicialização de 5 cargas diferentes
-        if (!tiposDeCarga.isEmpty() && !servicoDestinos.getListaDestinos().isEmpty() && !servicoClientes.getListaClientes().isEmpty()) {
-            for (int i = 1; i <= 5; i++) {
-                TipoCarga tipoCarga = tiposDeCarga.get((i - 1) % tiposDeCarga.size());
-                Cliente cliente = servicoClientes.getListaClientes().get((i - 1) % servicoClientes.getListaClientes().size());
-                Destino origem = servicoDestinos.getListaDestinos().get(0); // assumindo que há pelo menos um destino
-                Destino destino = servicoDestinos.getListaDestinos().get(1); // assumindo que há pelo menos dois destinos
-
-                Carga novaCarga = new Carga(i, i * 1000, i * 100.0, i * 2, origem, destino, tipoCarga, cliente, "Pendente", null);
-                cargasPendentes.offer(novaCarga);
-            }
-        } else {
-            System.out.println("Não é possível inicializar cargas sem tipos de carga, destinos e clientes pré-definidos.");
-        }
     }
 
     public void exibirCodigoESituacaoDasCargas() {

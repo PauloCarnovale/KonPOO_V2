@@ -22,24 +22,24 @@ import model.*;
 
 
 public class App {
-
-    /* Declaração das listas */
+    /* Declaração de listas */
     private List<Caminhao> listaCaminhoes;
     private List<Cliente> clientes;
     private List<Destino> destinos;
     private List<Itinerario> itinerarios = new ArrayList<>();
     private final Scanner scanner = new Scanner(System.in);
+
+    /* Classes de Serviços */
     private ServicoItinerario servicoItinerario;
     private ServicoFretes servicoFretes;
     private ServicoCargas servicoCargas;
     private ServicoTipoCargas servicoTipoCargas;
-
     private ServicoCaminhoes servicoCaminhoes = new ServicoCaminhoes();
     private ServicoClientes servicoClientes = new ServicoClientes();
     private ServicoMenu menu = new ServicoMenu();
     private ServicoDestinos servicoDestinos = new ServicoDestinos();
-
-    private FileManager fileManager = new FileManager();
+    /* Manipulador de arquivos */
+    private GerenciadorDeArquivos gerenciadorDeArquivos = new GerenciadorDeArquivos();
 
     public App() {
         this.servicoTipoCargas = new ServicoTipoCargas();
@@ -97,7 +97,7 @@ public class App {
                         servicoFretes.fretarCargas();
                         break;
                     case 10:
-                        fileManager.imprimirCadastros(
+                        gerenciadorDeArquivos.imprimirCadastros(
                                 listaCaminhoes,
                                 clientes,
                                 destinos,
@@ -129,7 +129,7 @@ public class App {
 
     private void carregaDados() {
         String caminhoArquivo = "dadosiniciais.csv";
-        SistemaData dadosCarregados = fileManager.carregarDados(caminhoArquivo);
+        SistemaData dadosCarregados = gerenciadorDeArquivos.carregarDados(caminhoArquivo);
         if (dadosCarregados != null) {
             this.listaCaminhoes = dadosCarregados.getCaminhoes();
             this.clientes = dadosCarregados.getClientes();

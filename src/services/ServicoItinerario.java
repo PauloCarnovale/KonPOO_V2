@@ -20,14 +20,14 @@ public class ServicoItinerario {
     public void inicializarItinerarios() {
         List<Destino> destinos = servicoDestinos.getListaDestinos();
         if (destinos.size() >= 2) {
-            int codigoItinerario1 = 1; // Código do primeiro itinerário
+            int codigoItinerario1 = 1;
             Destino origem1 = destinos.get(0);
             Destino destino1 = destinos.get(1);
             double distancia1 = calcularDistancia(origem1, destino1);
             itinerarios.add(new Itinerario(codigoItinerario1, origem1, destino1, distancia1));
 
             if (destinos.size() >= 3) {
-                int codigoItinerario2 = 2; // Código do segundo itinerário
+                int codigoItinerario2 = 2;
                 Destino origem2 = destinos.get(1);
                 Destino destino2 = destinos.get(2);
                 double distancia2 = calcularDistancia(origem2, destino2);
@@ -92,7 +92,7 @@ public class ServicoItinerario {
             }
         }
     }
-    // Getter para itinerarios
+    // Get para itinerarios
     public List<Itinerario> getItinerarios() {
         return itinerarios;
     }

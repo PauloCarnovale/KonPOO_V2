@@ -49,11 +49,11 @@ public class ServicoTipoCargas {
 
             System.out.print("Informe o tempo máximo de validade (em dias): ");
             int tempoMaximoValidade = scanner.nextInt();
-            scanner.nextLine(); // Consume the newline
+            scanner.nextLine(); // Limpa Buffer
 
             System.out.print("Informe a temperatura de armazenamento (em Celsius): ");
             double temperaturaArmazenamento = scanner.nextDouble();
-            scanner.nextLine(); // Consume the newline
+            scanner.nextLine(); // Limpa Buffer
 
             System.out.print("Requer refrigeração? (sim/nao): ");
             boolean requerRefrigeracao = scanner.nextLine().equalsIgnoreCase("sim");

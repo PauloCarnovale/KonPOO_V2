@@ -11,7 +11,7 @@ import java.util.Queue;
 import model.*;
 
 
-public class FileManager {
+public class GerenciadorDeArquivos {
 
     // Método para gravar caminhões em arquivo CSV
     public void gravarCaminhoesCSV(String caminhoArquivoCaminhoes, List<Caminhao> caminhoes) {
@@ -262,8 +262,6 @@ public class FileManager {
         String[] dados = linha.split(", ");
         int numero = Integer.parseInt(dados[0]);
         String descricao = dados[1];
-
-        // Exemplo genérico, ajuste conforme a estrutura de suas subclasses de TipoCarga
         return new TipoCarga(numero, descricao);
     }
 

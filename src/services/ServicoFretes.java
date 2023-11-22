@@ -4,7 +4,6 @@ import model.*;
 import model.Caminhao;
 import java.util.Queue;
 import java.util.List;
-import java.util.Iterator;
 import java.util.Scanner;
 
 
@@ -30,7 +29,7 @@ public class ServicoFretes {
             return;
         }
 
-        // Listar as cargas pendentes.
+        // Lista as cargas pendentes.
         for (Carga carga : cargasPendentes) {
             System.out.println("Carga: " + carga);
         }
@@ -67,7 +66,7 @@ public class ServicoFretes {
             return;
         }
 
-        // Atribuir um caminhão disponível.
+        // Atribui um caminhão disponível.
         Caminhao caminhaoDisponivel = null;
         for (Caminhao caminhao : caminhoesDisponiveis) {
             if (caminhao.isDisponivel()) {
@@ -82,7 +81,7 @@ public class ServicoFretes {
             return;
         }
 
-        // Calcular o valor do frete e apresentar ao usuário.
+        // Calcula o valor do frete e apresentar ao usuário.
         double valorFrete = calcularValorFrete(
                 itinerarioEscolhido.getDistancia(),
                 cargaEscolhida.getPeso(),

@@ -69,7 +69,7 @@ public class ServicoCaminhoes {
         System.out.print(mensagem);
         while (!scanner.hasNextDouble()) {
             System.out.println("Valor inválido. Por favor, tente novamente.");
-            scanner.next(); // Clear the invalid input
+            scanner.next(); // Limpa o buffer
         }
         return scanner.nextDouble();
     }
