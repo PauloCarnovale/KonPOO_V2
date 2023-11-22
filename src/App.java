@@ -97,7 +97,15 @@ public class App {
                         servicoFretes.fretarCargas();
                         break;
                     case 10:
-                        fileManager.imprimirCadastros(listaCaminhoes, clientes, destinos, itinerarios, servicoTipoCargas.getTiposDeCarga());
+                        fileManager.imprimirCadastros(
+                                listaCaminhoes,
+                                clientes,
+                                destinos,
+                                itinerarios,
+                                servicoTipoCargas.getTiposDeCarga(),
+                                servicoCargas.getCargasPendentes(),
+                                servicoFretes.getCargasPendentes()
+                        );
                         break;
                     case 11:
                         carregaDados();
