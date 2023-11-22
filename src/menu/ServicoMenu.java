@@ -17,6 +17,7 @@ public class ServicoMenu {
         System.out.println("12. Imprimir cadastro");
         System.out.println("13. Gerenciar Itinerarios");
         System.out.println("0. Finalizar sistema");
+        System.out.println("---------------------------------------------");
         System.out.print("Escolha uma opção: ");
     }
 
