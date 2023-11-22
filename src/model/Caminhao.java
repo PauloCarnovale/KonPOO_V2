@@ -1,5 +1,37 @@
 package model;
 
+/**
+ * Classe que representa um caminhão no sistema.
+ *
+ * Atributos:
+ *  - nome: String representando o nome do caminhão.
+ *  - velocidade: double indicando a velocidade máxima do caminhão.
+ *  - autonomia: double representando a autonomia do caminhão em quilômetros.
+ *  - custoPorKm: double representando o custo por quilômetro percorrido.
+ *  - codigo: String com o código identificador do caminhão.
+ *  - disponivel: boolean indicando se o caminhão está disponível para uso.
+ *  - capacidadeMaxima: int representando a capacidade máxima de carga do caminhão.
+ *
+ * Métodos:
+ *  - Caminhao(nome, velocidade, autonomia, custoPorKm, codigo): Construtor para criar uma nova instância de Caminhao.
+ *  - getNome(): Retorna o nome do caminhão.
+ *  - setNome(nome): Atualiza o nome do caminhão.
+ *  - getVelocidade(): Retorna a velocidade do caminhão.
+ *  - setVelocidade(velocidade): Atualiza a velocidade do caminhão.
+ *  - getAutonomia(): Retorna a autonomia do caminhão.
+ *  - setAutonomia(autonomia): Atualiza a autonomia do caminhão.
+ *  - getCustoPorKm(): Retorna o custo por quilômetro.
+ *  - setCustoPorKm(custoPorKm): Atualiza o custo por quilômetro.
+ *  - getCodigo(): Retorna o código do caminhão.
+ *  - setCodigo(codigo): Atualiza o código do caminhão.
+ *  - isDisponivel(): Verifica se o caminhão está disponível.
+ *  - setDisponivel(disponivel): Define a disponibilidade do caminhão.
+ *  - getCapacidadeMaxima(): Retorna a capacidade máxima de carga do caminhão.
+ *  - setCapacidadeMaxima(capacidadeMaxima): Atualiza a capacidade máxima de carga do caminhão.
+ *  - podeTransportar(carga): Verifica se o caminhão pode transportar a carga fornecida.
+ *  - toString(): Retorna uma representação em String do objeto Caminhao, incluindo nome, velocidade, autonomia, custo por quilômetro e código.
+ */
+
 public class Caminhao {
     private String nome;
     private double velocidade;
@@ -17,16 +49,7 @@ public class Caminhao {
         setCodigo(codigo);
     }
 
-    // Método para verificar se o caminhão está disponível
-    public boolean estaDisponivel() {
-        return disponivel;
-    }
 
-    // Método para verificar se o caminhão pode transportar a carga
-    public boolean podeTransportar(Frete carga) {
-        // verificar se o peso da carga é menor ou igual à capacidade máxima do caminhão
-        return carga.getPeso() <= capacidadeMaxima;
-    }
     public String getNome() {
         return nome;
     }
@@ -81,6 +104,31 @@ public class Caminhao {
         }
         this.codigo = codigo;
     }
+
+    public boolean isDisponivel() {
+        return disponivel;
+    }
+
+    public void setDisponivel(boolean disponivel) {
+        this.disponivel = disponivel;
+    }
+
+    public int getCapacidadeMaxima() {
+        return capacidadeMaxima;
+    }
+
+    public void setCapacidadeMaxima(int capacidadeMaxima) {
+        this.capacidadeMaxima = capacidadeMaxima;
+    }
+
+    public boolean podeTransportar(Frete carga) {
+        return this.capacidadeMaxima >= carga.getPeso();
+    }
+
+    public boolean estaDisponivel() {
+        return disponivel;
+    }
+
 
     @Override
     public String toString() {

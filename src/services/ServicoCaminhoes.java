@@ -1,6 +1,7 @@
 package services;
 
 import model.Caminhao;
+import model.Frete;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -25,47 +26,65 @@ public class ServicoCaminhoes {
     }
 
     public void cadastrarNovoCaminhao() {
+        exibirCaminhoesCadastrados();
+        System.out.println("Cadastro de novo caminhão:");
+
+        Caminhao novoCaminhao = solicitarDadosCaminhao();
+        if (novoCaminhao != null) {
+            listaCaminhoes.add(novoCaminhao);
+            listaCaminhoes.sort(Comparator.comparing(Caminhao::getNome));
+            System.out.println("Caminhão cadastrado com sucesso!");
+        }
+    }
+
+    private Caminhao solicitarDadosCaminhao() {
+        System.out.print("Informe o nome do caminhão: ");
+        String nome = scanner.next().trim();
+
+        if (isNomeExistente(nome)) {
+            System.out.println("Erro: Já existe um caminhão cadastrado com esse nome.");
+            return null;
+        }
+
+        double velocidade = solicitarValor("Informe a velocidade média do caminhão (km/h): ");
+        double autonomia = solicitarValor("Informe a autonomia do caminhão (km/l): ");
+        double custoPorKm = solicitarValor("Informe o custo por Km rodado: ");
+
+        int codCaminhao = listaCaminhoes.size() + 1;
+        return new Caminhao(nome, velocidade, autonomia, custoPorKm, "TRK-" + codCaminhao);
+    }
+
+    private boolean isNomeExistente(String nome) {
+        return listaCaminhoes.stream().anyMatch(c -> c.getNome().equalsIgnoreCase(nome));
+    }
+
+    private double solicitarValor(String mensagem) {
+        System.out.print(mensagem);
+        while (!scanner.hasNextDouble()) {
+            System.out.println("Valor inválido. Por favor, tente novamente.");
+            scanner.next(); // Clear the invalid input
+        }
+        return scanner.nextDouble();
+    }
+
+    private void exibirCaminhoesCadastrados() {
         System.out.println("Caminhões cadastrados:");
         for (Caminhao caminhao : listaCaminhoes) {
             System.out.println("Nome: " + caminhao.getNome() + ", Velocidade: " + caminhao.getVelocidade() + " km/h, Autonomia: " + caminhao.getAutonomia() + " km/l, Custo por Km: " + caminhao.getCustoPorKm() + ", Código: " + caminhao.getCodigo());
         }
-        
-        System.out.println("Cadastro de novo caminhão:");
-
-        // Solicita os dados do caminhão ao usuário
-        System.out.print("Informe o nome do caminhão: ");
-        String nome = scanner.next().trim();
-
-        // Verifica se já existe um caminhão com o mesmo nome
-        for (Caminhao c : listaCaminhoes) {
-            if (c.getNome().equalsIgnoreCase(nome)) {
-                System.out.println("Erro: Já existe um caminhão cadastrado com esse nome.");
-                return; // Interrompe a execução se já existir
-            }
-        }
-
-        // Continua o cadastro se o nome não existir
-        System.out.print("Informe a velocidade média do caminhão (km/h): ");
-        double velocidade = scanner.nextDouble();
-
-        System.out.print("Informe a autonomia do caminhão (km/l): ");
-        double autonomia = scanner.nextDouble();
-
-        System.out.print("Informe o custo por Km rodado: ");
-        double custoPorKm = scanner.nextDouble();
-
-        // Gera um código único para o novo caminhão
-        int codCaminhao = listaCaminhoes.size() + 1;
-
-        // Cria o novo caminhão e adiciona à lista
-        Caminhao novoCaminhao = new Caminhao(nome, velocidade, autonomia, custoPorKm, "TRK-"+codCaminhao);
-        listaCaminhoes.add(novoCaminhao);
-
-        // Ordena a lista pelo nome do caminhão
-        listaCaminhoes.sort(Comparator.comparing(Caminhao::getNome));
-
-        System.out.println("Caminhão cadastrado com sucesso!");
     }
+
+    public boolean estaDisponivel(Caminhao caminhao) {
+        // Lógica para verificar se o caminhão está disponível
+        // Pode envolver verificar se ele está atribuído a alguma carga, por exemplo
+        return caminhao.isDisponivel();
+    }
+
+    public boolean podeTransportar(Caminhao caminhao, Frete carga) {
+        // verificar se o peso da carga é menor ou igual à capacidade máxima do caminhão
+        return carga.getPeso() <= caminhao.getCapacidadeMaxima();
+    }
+
     public List<Caminhao> getListaCaminhoes() {
         return listaCaminhoes;
     }

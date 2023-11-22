@@ -142,7 +142,6 @@ public class Frete {
     // Método privado para calcular a distância entre origem e destino
     private double calcularDistancia() {
         // Implemente a lógica para calcular a distância aqui
-        // Por exemplo, pode ser uma chamada a um serviço externo ou cálculo baseado em coordenadas
         return 0;
     }
 
