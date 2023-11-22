@@ -37,7 +37,7 @@ public class ServicoItinerario {
     }
 
     private double calcularDistancia(Destino origem, Destino destino) {
-        return Math.random() * 100; // Retorna um valor fictício para exemplo
+        return Math.random() * 1000; // Retorna um valor fictício para exemplo
     }
 
     public void gerenciarItinerarios() {

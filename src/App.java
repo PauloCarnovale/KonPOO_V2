@@ -129,16 +129,25 @@ public class App {
 
     private void carregaDados() {
         String caminhoArquivo = "dadosiniciais.csv";
-        SistemaData dadosCarregados = gerenciadorDeArquivos.carregarDados(caminhoArquivo);
-        if (dadosCarregados != null) {
-            this.listaCaminhoes = dadosCarregados.getCaminhoes();
-            this.clientes = dadosCarregados.getClientes();
-            this.destinos = dadosCarregados.getDestinos();
+        try {
+            SistemaData dadosCarregados = gerenciadorDeArquivos.carregarDados(caminhoArquivo);
+            if (dadosCarregados != null) {
+                this.listaCaminhoes = dadosCarregados.getCaminhoes();
+                this.clientes = dadosCarregados.getClientes();
+                this.destinos = dadosCarregados.getDestinos();
+                // Atualize as listas de cargas pendentes, se necessário
 
-            List<TipoCarga> tiposCarregados = dadosCarregados.getTiposDeCarga();
-            if (tiposCarregados != null) {
-                this.servicoTipoCargas.setTiposDeCarga(tiposCarregados);
+                // Confirmação de sucesso
+                System.out.println("Dados carregados com sucesso!");
+            } else {
+                // Aviso se os dados não foram carregados
+                System.out.println("Não foram encontrados dados para carregar.");
             }
+        } catch (Exception e) {
+            // Mensagem de erro se algo der errado no processo de carregamento
+            System.out.println("Erro ao carregar os dados: " + e.getMessage());
+            e.printStackTrace();
         }
     }
+
 }

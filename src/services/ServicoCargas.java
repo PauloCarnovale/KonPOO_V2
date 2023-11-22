@@ -44,7 +44,7 @@ public class ServicoCargas {
         scanner.nextLine(); // Limpa o buffer do scanner.
 
         // Seleciona o tipo de carga.
-        System.out.print("Escolha o tipo de carga pelo número: ");
+        System.out.print("Escolha o tipo de carga pelo número: \n");
         tiposDeCarga.forEach(tipo -> System.out.println(tipo.getNumero() + " - " + tipo.getDescricao()));
         int escolhaTipo = scanner.nextInt();
         scanner.nextLine(); // Limpa o buffer do scanner.

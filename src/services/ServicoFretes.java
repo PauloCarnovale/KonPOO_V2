@@ -24,6 +24,7 @@ public class ServicoFretes {
     }
 
     public void fretarCargas() {
+        System.out.println("\n");
         if (cargasPendentes.isEmpty()) {
             System.out.println("Não há cargas pendentes para serem fretadas.");
             return;

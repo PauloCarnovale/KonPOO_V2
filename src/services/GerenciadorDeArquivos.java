@@ -190,34 +190,31 @@ public class GerenciadorDeArquivos {
         List<Caminhao> caminhoes = new ArrayList<>();
         List<Cliente> clientes = new ArrayList<>();
         List<Destino> destinos = new ArrayList<>();
-        List<TipoCarga> tiposDeCarga = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(arquivo))) {
             String linha;
             String secaoAtual = "";
 
             while ((linha = reader.readLine()) != null) {
-                if (linha.isEmpty()) continue;
-
-                // Verificar se estamos mudando de seção
-                if (linha.equals("caminhoes") || linha.equals("clientes") || linha.equals("destinos") ||
-                        linha.equals("tiposdecarga")) {
-                    secaoAtual = linha;
+                if (linha.isEmpty() || linha.contains("Nome, Velocidade") || linha.contains("Nome, Telefone") || linha.contains("Sigla, Cidade")) {
+                    // Pula a linha do cabeçalho ou linhas vazias
                     continue;
+                }
+
+                if (linha.equals("caminhoes") || linha.equals("clientes") || linha.equals("destinos")) {
+                    secaoAtual = linha;
+                    continue; // Pula a linha que contém o nome da seção
                 }
 
                 switch (secaoAtual) {
                     case "caminhoes":
-                        caminhoes.add(parseCaminhao(linha));
+                        caminhoes.add(parseCaminhao(linha, caminhoes.size() + 1)); // Passa o próximo código disponível
                         break;
                     case "clientes":
-                        clientes.add(parseCliente(linha));
+                        clientes.add(parseCliente(linha, clientes.size() + 1)); // Passa o próximo código disponível
                         break;
                     case "destinos":
-                        destinos.add(parseDestino(linha));
-                        break;
-                    case "tiposdecarga":
-                        tiposDeCarga.add(parseTipoCarga(linha));
+                        destinos.add(parseDestino(linha, destinos.size() + 1)); // Passa o próximo código disponível
                         break;
                 }
             }
@@ -225,45 +222,38 @@ public class GerenciadorDeArquivos {
             e.printStackTrace();
         }
 
-        return new SistemaData(caminhoes, clientes, destinos, tiposDeCarga);
+        return new SistemaData(caminhoes, clientes, destinos);
     }
 
-    private Caminhao parseCaminhao(String linha) {
+    private Caminhao parseCaminhao(String linha, int codigo) {
         String[] dados = linha.split(", ");
         String nome = dados[0];
         double velocidade = Double.parseDouble(dados[1]);
         double autonomia = Double.parseDouble(dados[2]);
         double custoPorKm = Double.parseDouble(dados[3]);
-        String identificador = dados[4];
+        String identificador = "TRK-" + codigo; // Gerando o identificador com o prefixo e o código
 
         return new Caminhao(nome, velocidade, autonomia, custoPorKm, identificador);
     }
 
-    private Cliente parseCliente(String linha) {
+    private Cliente parseCliente(String linha, int codigo) {
         String[] dados = linha.split(", ");
         String nome = dados[0];
         String telefone = dados[1];
         String cpf = dados[2];
-        String codigo = dados[3];
+        String codCliente = "CLT-" + codigo; // Gerando o código do cliente com o prefixo e o código
 
-        return new Cliente(codigo, nome, telefone, cpf);
+        return new Cliente(codCliente, nome, telefone, cpf);
     }
 
-    private Destino parseDestino(String linha) {
+    private Destino parseDestino(String linha, int codigo) {
         String[] dados = linha.split(", ");
-        int codigo = Integer.parseInt(dados[0]);
-        String sigla = dados[1];
-        String cidade = dados[2];
+        String sigla = dados[0];
+        String cidade = dados[1];
 
         return new Destino(codigo, sigla, cidade);
     }
 
-    private TipoCarga parseTipoCarga(String linha) {
-        String[] dados = linha.split(", ");
-        int numero = Integer.parseInt(dados[0]);
-        String descricao = dados[1];
-        return new TipoCarga(numero, descricao);
-    }
 
     // Método para gravar cargas em arquivo CSV
     public void gravarCargasCSV(String caminhoArquivoCargas, Queue<Carga> cargasPendentes) {

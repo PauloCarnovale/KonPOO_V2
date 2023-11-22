@@ -1,16 +1,9 @@
 caminhoes
-Nome, Velocidade, Autonomia, Custo Por Km, Identificador
-Caminhao1, 80, 10, 3, TRK-1
-Caminhao2, 70, 12, 2.5, TRK-2
+Caminhao1, 80, 10, 3
+Caminhao2, 70, 12, 2.5
 clientes
-Nome, Telefone, CPF, Código
-Cliente1, 12345678, 123.456.789-00, CLT-1
-Cliente2, 87654321, 987.654.321-00, CLT-2
+Cliente1, 12345678, 123.456.789-00
+Cliente2, 87654321, 987.654.321-00
 destinos
-Código, Sigla, Cidade
-1, SP, São Paulo
-2, RJ, Rio de Janeiro
-tiposdecarga
-Número, Descrição
-1, Perecível
-2, Durável
+SP, São Paulo
+RJ, Rio de Janeiro

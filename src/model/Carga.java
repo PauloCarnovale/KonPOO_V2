@@ -177,7 +177,7 @@ public class Carga {
 
     @Override
     public String toString() {
-        return "Carga{" +
+        return "\nCarga " +
                 "codigo=" + codigo +
                 ", peso=" + peso +
                 ", valorDeclarado=" + valorDeclarado +
