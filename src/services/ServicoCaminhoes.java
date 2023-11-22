@@ -1,7 +1,7 @@
 package services;
 
 import model.Caminhao;
-import model.Frete;
+import model.Carga;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -10,19 +10,26 @@ import java.util.Scanner;
 public class ServicoCaminhoes {
     private List<Caminhao> listaCaminhoes;
     private Scanner scanner;
+    private ServicoFretes servicoFretes;
 
     public ServicoCaminhoes() {
         listaCaminhoes = new ArrayList<>();
         scanner = new Scanner(System.in);
+
         inicializarCaminhoes();
     }
 
     private void inicializarCaminhoes() {
         listaCaminhoes.add(new Caminhao("Volvo FH16", 80, 10, 2.5, "TRK-1"));
+        listaCaminhoes.get(listaCaminhoes.size() - 1).setDisponivel(true);
         listaCaminhoes.add(new Caminhao("Scania R Series", 85, 8, 2.8, "TRK-2"));
+        listaCaminhoes.get(listaCaminhoes.size() - 2).setDisponivel(true);
         listaCaminhoes.add(new Caminhao("Mercedes-Benz Actros", 75, 12, 2.0, "TRK-3"));
+        listaCaminhoes.get(listaCaminhoes.size() - 3).setDisponivel(true);
         listaCaminhoes.add(new Caminhao("MAN TGX", 90, 9, 3.0, "TRK-4"));
+        listaCaminhoes.get(listaCaminhoes.size() - 4).setDisponivel(true);
         listaCaminhoes.add(new Caminhao("DAF XF", 88, 11, 2.7, "TRK-5"));
+        listaCaminhoes.get(listaCaminhoes.size() - 5).setDisponivel(true);
     }
 
     public void cadastrarNovoCaminhao() {
@@ -75,16 +82,28 @@ public class ServicoCaminhoes {
     }
 
     public boolean estaDisponivel(Caminhao caminhao) {
-        // Lógica para verificar se o caminhão está disponível
-        // Pode envolver verificar se ele está atribuído a alguma carga, por exemplo
-        return caminhao.isDisponivel();
+        if (!caminhao.isDisponivel()) {
+            return false; // O caminhão não está disponível se a propriedade disponivel for false
+        }
+
+        // Verificar se o caminhão está atualmente atribuído a um frete
+        for (Carga carga : servicoFretes.getCargasPendentes()) {
+            if (carga.getCaminhaoDesignado() != null && carga.getCaminhaoDesignado().equals(caminhao)) {
+                return false; // O caminhão não está disponível se já estiver atribuído a um frete
+            }
+        }
+
+        return true; // O caminhão está disponível se não estiver atribuído a nenhum frete e se estiver marcado como disponível
     }
 
-    public boolean podeTransportar(Caminhao caminhao, Frete carga) {
-        // verificar se o peso da carga é menor ou igual à capacidade máxima do caminhão
-        return carga.getPeso() <= caminhao.getCapacidadeMaxima();
+    public Caminhao encontrarCaminhaoDisponivel() {
+        for (Caminhao caminhao : listaCaminhoes) {
+            if (caminhao.isDisponivel()) {
+                return caminhao;
+            }
+        }
+        return null; // Retorna null se nenhum caminhão disponível for encontrado
     }
-
     public List<Caminhao> getListaCaminhoes() {
         return listaCaminhoes;
     }

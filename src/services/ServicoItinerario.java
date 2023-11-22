@@ -17,6 +17,29 @@ public class ServicoItinerario {
         this.scanner = new Scanner(System.in);
     }
 
+    public void inicializarItinerarios() {
+        List<Destino> destinos = servicoDestinos.getListaDestinos();
+        if (destinos.size() >= 2) {
+            int codigoItinerario1 = 1; // Código do primeiro itinerário
+            Destino origem1 = destinos.get(0);
+            Destino destino1 = destinos.get(1);
+            double distancia1 = calcularDistancia(origem1, destino1);
+            itinerarios.add(new Itinerario(codigoItinerario1, origem1, destino1, distancia1));
+
+            if (destinos.size() >= 3) {
+                int codigoItinerario2 = 2; // Código do segundo itinerário
+                Destino origem2 = destinos.get(1);
+                Destino destino2 = destinos.get(2);
+                double distancia2 = calcularDistancia(origem2, destino2);
+                itinerarios.add(new Itinerario(codigoItinerario2, origem2, destino2, distancia2));
+            }
+        }
+    }
+
+    private double calcularDistancia(Destino origem, Destino destino) {
+        return Math.random() * 100; // Retorna um valor fictício para exemplo
+    }
+
     public void gerenciarItinerarios() {
         System.out.println("Gerenciar Itinerários:");
 
@@ -48,7 +71,7 @@ public class ServicoItinerario {
         }
 
         // Gera um código único para o novo itinerário
-        String codItinerario = "BR-" + (itinerarios.size() + 1);
+        int codItinerario = itinerarios.size() + 1;
 
         // Caso não exista, cadastra um novo itinerário
         System.out.println("Informe a distância em km entre os destinos:");
@@ -58,6 +81,17 @@ public class ServicoItinerario {
         System.out.println("Itinerário cadastrado com sucesso!");
     }
 
+    public void imprimirItinerarios() {
+        List<Itinerario> listaDeItinerarios = getItinerarios();
+        if (listaDeItinerarios.isEmpty()) {
+            System.out.println("Não há itinerários cadastrados.");
+        } else {
+            System.out.println("Lista de Itinerários:");
+            for (Itinerario itinerario : listaDeItinerarios) {
+                System.out.println(itinerario);
+            }
+        }
+    }
     // Getter para itinerarios
     public List<Itinerario> getItinerarios() {
         return itinerarios;

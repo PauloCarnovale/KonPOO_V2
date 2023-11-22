@@ -39,7 +39,6 @@ public class Caminhao {
     private double custoPorKm;
     private String codigo;
     private boolean disponivel;
-    private int capacidadeMaxima;
 
     public Caminhao(String nome, double velocidade, double autonomia, double custoPorKm, String codigo) {
         setNome(nome);
@@ -49,7 +48,9 @@ public class Caminhao {
         setCodigo(codigo);
     }
 
-
+    public boolean podeTransportar(Carga carga) {
+        return this.disponivel; // ou qualquer outra lógica simples que você deseja implementar
+    }
     public String getNome() {
         return nome;
     }
@@ -113,17 +114,6 @@ public class Caminhao {
         this.disponivel = disponivel;
     }
 
-    public int getCapacidadeMaxima() {
-        return capacidadeMaxima;
-    }
-
-    public void setCapacidadeMaxima(int capacidadeMaxima) {
-        this.capacidadeMaxima = capacidadeMaxima;
-    }
-
-    public boolean podeTransportar(Frete carga) {
-        return this.capacidadeMaxima >= carga.getPeso();
-    }
 
     public boolean estaDisponivel() {
         return disponivel;

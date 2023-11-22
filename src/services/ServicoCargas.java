@@ -7,20 +7,22 @@ import java.util.Scanner;
 import java.util.Queue;
 
 public class ServicoCargas {
-    private Queue<Frete> cargasPendentes;
+    private Queue<Carga> cargasPendentes;
     private ServicoClientes servicoClientes;
     private ServicoDestinos servicoDestinos;
     private List<TipoCarga> tiposDeCarga;
+    private ServicoCaminhoes servicoCaminhoes;
     private Scanner scanner;
 
-    public ServicoCargas(ServicoClientes servicoClientes, ServicoDestinos servicoDestinos, List<TipoCarga> tiposDeCarga) {
+    public ServicoCargas(ServicoClientes servicoClientes, ServicoDestinos servicoDestinos, List<TipoCarga> tiposDeCarga, ServicoCaminhoes servicoCaminhoes) {
         this.cargasPendentes = new LinkedList<>();
         this.servicoClientes = servicoClientes;
         this.servicoDestinos = servicoDestinos;
         this.tiposDeCarga = tiposDeCarga;
+        this.servicoCaminhoes = servicoCaminhoes;
         this.scanner = new Scanner(System.in);
         inicializarTiposDeCarga();
-        inicializarCargas();
+        //inicializarCargas();
 
     }
 
@@ -41,110 +43,65 @@ public class ServicoCargas {
         tiposDeCarga.add(congelados);
     }
 
-    public void cadastrarNovoTipoDeCarga() {
-        int numero = tiposDeCarga.size() + 1; // Número é atribuído automaticamente
-
-        System.out.print("Informe a descrição do tipo de carga: ");
-        String descricao = scanner.nextLine();
-
-        System.out.print("Escolha o tipo de carga (1 - Perecível, 2 - Durável): ");
-        int escolha = scanner.nextInt();
-        scanner.nextLine(); // Consume the newline
-
-        TipoCarga novoTipo;
-        if (escolha == 1) {
-            // Lógica para criar uma carga Perecível
-            System.out.print("Informe a origem da carga perecível: ");
-            String origem = scanner.nextLine();
-
-            System.out.print("Informe o tempo máximo de validade (em dias): ");
-            int tempoMaximoValidade = scanner.nextInt();
-            scanner.nextLine(); // Consume the newline
-
-            System.out.print("Informe a temperatura de armazenamento (em Celsius): ");
-            double temperaturaArmazenamento = scanner.nextDouble();
-            scanner.nextLine(); // Consume the newline
-
-            System.out.print("Requer refrigeração? (sim/nao): ");
-            boolean requerRefrigeracao = scanner.nextLine().equalsIgnoreCase("sim");
-
-            novoTipo = new TipoCarga.Perecivel(numero, descricao, origem, tempoMaximoValidade, temperaturaArmazenamento, requerRefrigeracao);
-        } else {
-            // Lógica para criar uma carga Durável
-            System.out.print("Informe o setor da carga durável: ");
-            String setor = scanner.nextLine();
-
-            System.out.print("Informe o material principal: ");
-            String materialPrincipal = scanner.nextLine();
-
-            System.out.print("Informe a durabilidade esperada (em anos): ");
-            int durabilidadeAnos = scanner.nextInt();
-            scanner.nextLine(); // Consume the newline
-
-            System.out.print("A carga é frágil? (sim/nao): ");
-            boolean fragil = scanner.nextLine().equalsIgnoreCase("sim");
-
-            novoTipo = new TipoCarga.Duravel(numero, descricao, setor, materialPrincipal, durabilidadeAnos, fragil);
-        }
-
-        tiposDeCarga.add(novoTipo);
-        System.out.println("Tipo de carga cadastrado com sucesso!");
-    }
-    public List<TipoCarga> getTiposDeCarga() {
-        return tiposDeCarga;
-    }
-
     public void cadastrarNovaCarga() {
         System.out.println("Cadastro de nova carga:");
 
+        // Verificar se há tipos de carga cadastrados.
         if (tiposDeCarga.isEmpty()) {
             System.out.println("Não há tipos de carga cadastrados. Cadastre um tipo de carga primeiro.");
-            return; // Ou redirecionar para o cadastro de tipos de carga
+            return;
         }
 
-        // Exibir tipos de carga e selecionar
+        // Selecionar o tipo de carga.
         tiposDeCarga.forEach(tipo -> System.out.println("Número: " + tipo.getNumero() + ", Descrição: " + tipo.getDescricao()));
         System.out.print("Escolha um tipo de carga pelo número: ");
         int numeroTipoCarga = scanner.nextInt();
-        TipoCarga tipoCarga = tiposDeCarga.stream()
+        TipoCarga tipoCargaSelecionada = tiposDeCarga.stream()
                 .filter(tipo -> tipo.getNumero() == numeroTipoCarga)
                 .findFirst()
                 .orElse(null);
 
-        if (tipoCarga == null) {
+        if (tipoCargaSelecionada == null) {
             System.out.println("Tipo de carga não encontrado. Por favor, tente novamente.");
             return;
         }
 
+        // Coletar dados da carga.
         System.out.print("Informe o código da carga: ");
         int codigoCarga = scanner.nextInt();
-
-        // Verifica se já existe uma carga com o mesmo código
-        if (cargasPendentes.stream().anyMatch(c -> c.getCodigo() == codigoCarga)) {
-            System.out.println("Erro: Já existe uma carga cadastrada com esse código.");
-            return; // Interrompe a execução se já existir
-        }
-
         System.out.print("Informe o peso da carga (em toneladas): ");
-        int peso = scanner.nextInt();
-
+        int pesoCarga = scanner.nextInt();
         System.out.print("Informe o valor declarado da carga: ");
         double valorDeclarado = scanner.nextDouble();
-
         System.out.print("Informe o tempo máximo para o frete (em dias): ");
         int tempoMaximo = scanner.nextInt();
+        scanner.nextLine(); // Limpa o buffer do scanner após ler um número.
 
+        // Selecionar cliente.
         Cliente cliente = servicoClientes.selecionarCliente();
+        // Selecionar destinos de origem e destino.
         Destino origem = servicoDestinos.selecionarDestino("origem");
         Destino destino = servicoDestinos.selecionarDestino("destino");
 
-        Frete novaFrete = new Frete(codigoCarga, peso, valorDeclarado, tempoMaximo, origem, destino, tipoCarga, cliente, "Pendente", null);
+        // Encontrar um caminhão disponível.
+        Caminhao caminhaoDisponivel = servicoCaminhoes.encontrarCaminhaoDisponivel();
+        if (caminhaoDisponivel == null) {
+            System.out.println("Não há caminhões disponíveis no momento. A carga não pode ser cadastrada.");
+            return;
+        }
 
-        cargasPendentes.offer(novaFrete);
+        // Criar a nova carga.
+        Carga novaCarga = new Carga(codigoCarga, pesoCarga, valorDeclarado, tempoMaximo, origem, destino, tipoCargaSelecionada, cliente, "Pendente", caminhaoDisponivel);
 
-        System.out.println("Carga cadastrada com sucesso e adicionada à fila de pendências.");
+        // Definir o caminhão e alterar a situação da carga para 'Locada'.
+        novaCarga.definirCaminhao(caminhaoDisponivel);
 
+        // Adicionar a nova carga à lista de cargas pendentes.
+        cargasPendentes.offer(novaCarga);
+
+        System.out.println("Carga cadastrada com sucesso e adicionada à fila de pendências. Caminhão designado: " + caminhaoDisponivel.getNome());
     }
+
 
     public void inicializarCargas() {
         // Exemplo de inicialização de 5 cargas diferentes
@@ -155,7 +112,7 @@ public class ServicoCargas {
                 Destino origem = servicoDestinos.getListaDestinos().get(0); // assumindo que há pelo menos um destino
                 Destino destino = servicoDestinos.getListaDestinos().get(1); // assumindo que há pelo menos dois destinos
 
-                Frete novaCarga = new Frete(i, i * 1000, i * 100.0, i * 2, origem, destino, tipoCarga, cliente, "Pendente", null);
+                Carga novaCarga = new Carga(i, i * 1000, i * 100.0, i * 2, origem, destino, tipoCarga, cliente, "Pendente", null);
                 cargasPendentes.offer(novaCarga);
             }
         } else {
@@ -168,7 +125,7 @@ public class ServicoCargas {
             System.out.println("Não há cargas cadastradas.");
         } else {
             System.out.println("Código e Situação das cargas cadastradas:");
-            for (Frete carga : cargasPendentes) {
+            for (Carga carga : cargasPendentes) {
                 System.out.println("Código: " + carga.getCodigo() + " - Situação: " + carga.getSituacao());
             }
         }
@@ -180,7 +137,7 @@ public class ServicoCargas {
         scanner.nextLine(); // Limpa o buffer do teclado
 
         // Encontra a carga com o código especificado
-        Frete carga = cargasPendentes.stream()
+        Carga carga = cargasPendentes.stream()
                 .filter(c -> c.getCodigo() == codigo)
                 .findFirst()
                 .orElse(null);
@@ -192,20 +149,30 @@ public class ServicoCargas {
 
             switch (novaSituacao.toLowerCase()) {
                 case "pendente":
-                    // Implementar lógica se necessário
                     carga.setSituacao("Pendente");
                     break;
                 case "locada":
-                    carga.definirCaminhao();
+                    // Precisamos encontrar um caminhão disponível antes de definir a carga como locada
+                    Caminhao caminhaoDisponivel = servicoCaminhoes.encontrarCaminhaoDisponivel();
+                    if (caminhaoDisponivel != null) {
+                        carga.definirCaminhao(caminhaoDisponivel);
+                        System.out.println("Caminhão " + caminhaoDisponivel.getNome() + " foi designado para a carga.");
+                    } else {
+                        System.out.println("Não há caminhões disponíveis para locar a carga.");
+                    }
                     break;
                 case "cancelada":
                     carga.cancelarCarga();
                     break;
                 case "finalizada":
                     carga.cargaEntregue();
+                    // Aqui, você também deve liberar o caminhão se for o caso
+                    if (carga.getCaminhaoDesignado() != null) {
+                        carga.getCaminhaoDesignado().setDisponivel(true);
+                    }
                     break;
                 default:
-                    System.out.println("Situacao inválida.");
+                    System.out.println("Situação inválida.");
                     return;
             }
             System.out.println("Situação da carga atualizada para: " + novaSituacao);
@@ -214,6 +181,7 @@ public class ServicoCargas {
         }
     }
 
+
     public void consultarCargas() {
         if (cargasPendentes.isEmpty()) {
             System.out.println("Não há cargas pendentes cadastradas.");
@@ -221,21 +189,21 @@ public class ServicoCargas {
         }
 
         System.out.println("Lista de Cargas Pendentes:");
-        for (Frete frete : cargasPendentes) {
-            System.out.println("Código da Carga: " + frete.getCodigo());
-            System.out.println("Cliente: " + (frete.getCliente() != null ? frete.getCliente().getNome() : "Cliente não atribuído"));
-            System.out.println("Peso: " + frete.getPeso() + " toneladas");
-            System.out.println("Valor Declarado: R$ " + frete.getValorDeclarado());
-            System.out.println("Tempo Máximo para o Frete: " + frete.getTempoMaximo() + " dias");
-            System.out.println("Tipo de Carga: " + (frete.getTipoCarga() != null ? frete.getTipoCarga().getDescricao() : "Tipo de carga não atribuído"));
-            System.out.println("Origem: " + (frete.getOrigem() != null ? frete.getOrigem().getSigla() : "Origem não atribuída"));
-            System.out.println("Destino: " + (frete.getDestino() != null ? frete.getDestino().getSigla() : "Destino não atribuído"));
-            String nomeCaminhao = frete.getCaminhaoDesignado() != null ? frete.getCaminhaoDesignado().getNome() : "Não Atribuído";
+        for (Carga carga : cargasPendentes) {
+            System.out.println("Código da Carga: " + carga.getCodigo());
+            System.out.println("Cliente: " + (carga.getCliente() != null ? carga.getCliente().getNome() : "Cliente não atribuído"));
+            System.out.println("Peso: " + carga.getPeso() + " toneladas");
+            System.out.println("Valor Declarado: R$ " + carga.getValorDeclarado());
+            System.out.println("Tempo Máximo para o Frete: " + carga.getTempoMaximo() + " dias");
+            System.out.println("Tipo de Carga: " + (carga.getTipoCarga() != null ? carga.getTipoCarga().getDescricao() : "Tipo de carga não atribuído"));
+            System.out.println("Origem: " + (carga.getOrigem() != null ? carga.getOrigem().getSigla() : "Origem não atribuída"));
+            System.out.println("Destino: " + (carga.getDestino() != null ? carga.getDestino().getSigla() : "Destino não atribuído"));
+            String nomeCaminhao = carga.getCaminhaoDesignado() != null ? carga.getCaminhaoDesignado().getNome() : "Não Atribuído";
             System.out.println("Caminhão Designado: " + nomeCaminhao);
             System.out.println("-----------------------------------");
         }
     }
-    public Queue<Frete> getCargasPendentes() {
+    public Queue<Carga> getCargasPendentes() {
         return cargasPendentes;
     }
 }

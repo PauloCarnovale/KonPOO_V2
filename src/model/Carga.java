@@ -1,6 +1,6 @@
 package model;
 
-public class Frete {
+public class Carga {
     private int codigo;
     private int peso;
     private double valorDeclarado;
@@ -12,7 +12,7 @@ public class Frete {
     private String situacao;
     private Caminhao caminhaoDesignado;
 
-    public Frete(int codigo, int peso, double valorDeclarado, int tempoMaximo, Destino origem, Destino destino,
+    public Carga(int codigo, int peso, double valorDeclarado, int tempoMaximo, Destino origem, Destino destino,
                  TipoCarga tipoCarga, Cliente cliente, String situacao, Caminhao caminhaoDesignado) {
         this.codigo = codigo;
         this.peso = peso;
@@ -107,29 +107,35 @@ public class Frete {
     }
 
     // Metodo para definir um caminhão para carga, mudando a situação para Locada
-    public void definirCaminhao() {
+    public void definirCaminhao(Caminhao caminhao) {
         if (this.situacao.equals("Pendente")) {
+            this.caminhaoDesignado = caminhao;
             this.situacao = "Locada";
+            // Supondo que você queira marcar o caminhão como não disponível
+            caminhao.setDisponivel(false);
         } else {
-            System.out.println("A carga não pode ser locada, pois está em uma situação inválida");
+            System.out.println("Carga já está locada ou em uma situação que não permite alocação de caminhão.");
         }
     }
 
     // Metodo para marcar a carga como entregue, mudando a situação para Finalizada
     public void cargaEntregue() {
-        if (this.situacao.equals("Locada")) {
+        if ("Locada".equals(this.situacao)) {
             this.situacao = "Finalizada";
+            if (this.caminhaoDesignado != null) {
+                this.caminhaoDesignado.setDisponivel(true); // Libera o caminhão
+            }
         } else {
-            System.out.println("A carga não pode ser entregue, pois está locada");
+            System.out.println("A carga não está locada e não pode ser marcada como entregue.");
         }
     }
 
     // Metodo para cancelar a carga, mudando a situação para Cancelada
     public void cancelarCarga() {
-        if (this.situacao.equals("Finalizada")) {
+        if (!"Finalizada".equals(this.situacao)) {
             this.situacao = "Cancelada";
         } else {
-            System.out.println("A carga não pode ser entregue, pois ja foi entregue");
+            System.out.println("A carga já foi entregue e não pode ser cancelada.");
         }
     }
 
@@ -156,16 +162,18 @@ public class Frete {
     public double calcularPrecoPorPeso() {
         double precoPorPeso;
 
-        if ("Perecível".equals(getTipoCarga())) {
+        // Aqui supomos que TipoCarga tenha um método getDescricao() que retorna uma String
+        if ("Perecível".equals(tipoCarga.getDescricao())) {
             precoPorPeso = peso * 2.0;
-        } else if ("Durável".equals(getTipoCarga())) {
+        } else if ("Durável".equals(tipoCarga.getDescricao())) {
             precoPorPeso = peso * 1.5;
         } else {
-            // Caso o tipo de carga não seja "Perecível" nem "Durável", você pode definir um valor padrão ou tratar conforme necessário.
-            precoPorPeso = peso;
+            // Outros tipos de carga podem ter outra lógica de preço
+            precoPorPeso = peso; // Suposição para um tipo de carga padrão
         }
 
         return precoPorPeso;
     }
+
 
 }

@@ -9,32 +9,38 @@ public class App {
 
     /* Declaração das listas */
     private List<Caminhao> listaCaminhoes;
-    private List<Cliente> listaClientes;
+    private List<Cliente> clientes;
     private List<Destino> destinos;
-    private List<TipoCarga> tiposDeCarga = new ArrayList<>();
     private List<Itinerario> itinerarios = new ArrayList<>();
     private final Scanner scanner = new Scanner(System.in);
     private ServicoItinerario servicoItinerario;
     private ServicoFretes servicoFretes;
-    private ServicoCargas servicoCargas;
+    private ServicoCargas servicoCargas; // Alterado para camelCase
+    private ServicoTipoCargas servicoTipoCargas; // Nova instância para gerenciar tipos de carga
 
     /* Instanciações das classes de serviço */
-    ServicoCaminhoes caminhoes = new ServicoCaminhoes();
-    ServicoClientes clientes = new ServicoClientes();
-    ServicoMenu menu = new ServicoMenu();
-    ServicoDestinos cidades = new ServicoDestinos();
-    ServicoCargas cargas = new ServicoCargas(clientes, cidades, tiposDeCarga);
+    private ServicoCaminhoes servicoCaminhoes = new ServicoCaminhoes(); // Alterado para camelCase e private
+    private ServicoClientes servicoClientes = new ServicoClientes(); // Alterado para private
+    private ServicoMenu menu = new ServicoMenu(); // Alterado para private
+    private ServicoDestinos servicoDestinos = new ServicoDestinos(); // Alterado para private
 
-    FileManager fileManager = new FileManager();
+    private FileManager fileManager = new FileManager(); // Alterado para private
+
+    public App() {
+        this.servicoTipoCargas = new ServicoTipoCargas(); // Inicialização do ServicoTipoCargas
+        this.servicoCargas = new ServicoCargas(servicoClientes, servicoDestinos, servicoTipoCargas.getTiposDeCarga(), servicoCaminhoes); // Adicione servicoCaminhoes aqui
+        inicializarSistema(); // Chamada para inicializar o sistema
+    }
+
 
 
     public void inicializarSistema() {
-        this.listaCaminhoes = caminhoes.getListaCaminhoes();
-        this.listaClientes = clientes.getListaClientes();
-        this.destinos = cidades.getListaDestinos();
-        this.tiposDeCarga = cargas.getTiposDeCarga();
-        this.servicoCargas = new ServicoCargas(clientes, cidades, tiposDeCarga);
-        this.servicoItinerario = new ServicoItinerario(cidades);
+        this.listaCaminhoes = servicoCaminhoes.getListaCaminhoes();
+        this.clientes = servicoClientes.getListaClientes();
+        this.destinos = servicoDestinos.getListaDestinos();
+        this.servicoItinerario = new ServicoItinerario(servicoDestinos);
+        this.servicoFretes = new ServicoFretes(servicoCargas.getCargasPendentes(), listaCaminhoes);
+
 
 
     }
@@ -46,26 +52,27 @@ public class App {
                 opcao = scanner.nextInt();
                 switch (opcao) {
                     case 1:
-                        cidades.cadastrarNovoDestino();
+                        servicoDestinos.cadastrarNovoDestino();
                         break;
                     case 2:
-                        caminhoes.cadastrarNovoCaminhao();
+                        servicoCaminhoes.cadastrarNovoCaminhao();
                         break;
                     case 3:
-                        clientes.cadastrarNovoCliente();
+                        servicoClientes.cadastrarNovoCliente();
                         break;
                     case 4:
-                        cargas.cadastrarNovoTipoDeCarga();
+                        servicoTipoCargas.cadastrarNovoTipoDeCarga();
                         break;
                     case 5:
-                        cargas.cadastrarNovaCarga();
+                        servicoCargas.consultarCargas();
+                        servicoCargas.cadastrarNovaCarga();
                         break;
                     case 6:
                         servicoCargas.consultarCargas();
                         break;
                     case 7:
-                        cargas.exibirCodigoESituacaoDasCargas();
-                        cargas.alterarSituacaoCarga();
+                        servicoCargas.exibirCodigoESituacaoDasCargas();
+                        servicoCargas.alterarSituacaoCarga();
                         break;
                     case 8:
                         inicializarSistema();
@@ -74,14 +81,16 @@ public class App {
                         servicoFretes.fretarCargas();
                         break;
                     case 10:
-                        fileManager.imprimirCadastros(listaCaminhoes, listaClientes, destinos, itinerarios, tiposDeCarga);
+                        fileManager.imprimirCadastros(listaCaminhoes, clientes, destinos, itinerarios, servicoTipoCargas.getTiposDeCarga());
                         break;
                     case 11:
                         carregaDados();
                         break;
                     case 12:
+                        // Opção reservada para uso futuro
                         break;
                     case 13:
+                        servicoItinerario.imprimirItinerarios();
                         servicoItinerario.gerenciarItinerarios();
                         break;
                     case 0:
@@ -92,17 +101,20 @@ public class App {
                 }
             } while (opcao != 0);
             scanner.close(); // Fecha o Scanner
-
     }
 
-    private void carregaDados(){
+    private void carregaDados() {
         String caminhoArquivo = "dadosiniciais.csv";
         SistemaData dadosCarregados = fileManager.carregarDados(caminhoArquivo);
         if (dadosCarregados != null) {
             this.listaCaminhoes = dadosCarregados.getCaminhoes();
-            this.listaClientes = dadosCarregados.getClientes();
+            this.clientes = dadosCarregados.getClientes();
             this.destinos = dadosCarregados.getDestinos();
-            this.tiposDeCarga = dadosCarregados.getTiposDeCarga();
+
+            List<TipoCarga> tiposCarregados = dadosCarregados.getTiposDeCarga();
+            if (tiposCarregados != null) {
+                this.servicoTipoCargas.setTiposDeCarga(tiposCarregados);
+            }
         }
     }
 }

@@ -75,7 +75,7 @@ public class FileManager {
         try (FileWriter fwItinerarios = new FileWriter(caminhoArquivoItinerarios)) {
             fwItinerarios.append("Código, Origem, Destino, Distância\n");
             for (Itinerario itinerario : itinerarios) {
-                fwItinerarios.append(itinerario.getCodigo())
+                fwItinerarios.append(String.valueOf(itinerario.getCodigo()))
                         .append(", ")
                         .append(itinerario.getOrigem().getSigla())
                         .append(", ")
@@ -121,27 +121,27 @@ public class FileManager {
         }
     }
 
-    public void gravarFretesCSV(String caminhoArquivoFretes, Queue<Frete> cargasPendentes) {
+    public void gravarFretesCSV(String caminhoArquivoFretes, Queue<Carga> cargasPendentes) {
         try (FileWriter fwFretes = new FileWriter(caminhoArquivoFretes)) {
             fwFretes.append("Codigo, Peso, ValorDeclarado, TempoMaximo, Origem, Destino, TipoCarga, Cliente, Situacao\n");
-            for (Frete frete : cargasPendentes) {
-                fwFretes.append(String.valueOf(frete.getCodigo())) // Converta para String
+            for (Carga carga : cargasPendentes) {
+                fwFretes.append(String.valueOf(carga.getCodigo())) // Converta para String
                         .append(", ")
-                        .append(String.valueOf(frete.getPeso())) // Converta para String
+                        .append(String.valueOf(carga.getPeso())) // Converta para String
                         .append(", ")
-                        .append(String.valueOf(frete.getValorDeclarado())) // Converta para String
+                        .append(String.valueOf(carga.getValorDeclarado())) // Converta para String
                         .append(", ")
-                        .append(String.valueOf(frete.getTempoMaximo())) // Converta para String
+                        .append(String.valueOf(carga.getTempoMaximo())) // Converta para String
                         .append(", ")
-                        .append(frete.getOrigem().getSigla())
+                        .append(carga.getOrigem().getSigla())
                         .append(", ")
-                        .append(frete.getDestino().getSigla())
+                        .append(carga.getDestino().getSigla())
                         .append(", ")
-                        .append(frete.getTipoCarga().getDescricao())
+                        .append(carga.getTipoCarga().getDescricao())
                         .append(", ")
-                        .append(frete.getCliente().getNome())
+                        .append(carga.getCliente().getNome())
                         .append(", ")
-                        .append(frete.getSituacao())
+                        .append(carga.getSituacao())
                         .append("\n");
             }
         } catch (IOException e) {
