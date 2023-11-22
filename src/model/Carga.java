@@ -175,5 +175,16 @@ public class Carga {
         return precoPorPeso;
     }
 
-
+    @Override
+    public String toString() {
+        return "Carga{" +
+                "codigo=" + codigo +
+                ", peso=" + peso +
+                ", valorDeclarado=" + valorDeclarado +
+                ", tipoCarga=" + tipoCarga +
+                ", cliente=" + cliente +
+                ", situacao='" + situacao + '\'' +
+                ", caminhaoDesignado=" + caminhaoDesignado +
+                '}';
+    }
 }

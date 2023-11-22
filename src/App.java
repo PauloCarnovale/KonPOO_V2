@@ -29,6 +29,7 @@ public class App {
     public App() {
         this.servicoTipoCargas = new ServicoTipoCargas(); // Inicialização do ServicoTipoCargas
         this.servicoCargas = new ServicoCargas(servicoClientes, servicoDestinos, servicoTipoCargas.getTiposDeCarga(), servicoCaminhoes); // Adicione servicoCaminhoes aqui
+        this.servicoItinerario = new ServicoItinerario(new ServicoDestinos());
         inicializarSistema(); // Chamada para inicializar o sistema
     }
 
@@ -38,8 +39,8 @@ public class App {
         this.listaCaminhoes = servicoCaminhoes.getListaCaminhoes();
         this.clientes = servicoClientes.getListaClientes();
         this.destinos = servicoDestinos.getListaDestinos();
-        this.servicoItinerario = new ServicoItinerario(servicoDestinos);
-        this.servicoFretes = new ServicoFretes(servicoCargas.getCargasPendentes(), listaCaminhoes);
+        this.servicoItinerario.inicializarItinerarios();
+        this.servicoFretes = new ServicoFretes(servicoCargas.getCargasPendentes(), listaCaminhoes, servicoItinerario); // Passe a instância de ServicoItinerario
 
 
 

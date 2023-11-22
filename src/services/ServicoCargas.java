@@ -21,7 +21,7 @@ public class ServicoCargas {
         this.tiposDeCarga = tiposDeCarga;
         this.servicoCaminhoes = servicoCaminhoes;
         this.scanner = new Scanner(System.in);
-        inicializarTiposDeCarga();
+        //inicializarTiposDeCarga();
         //inicializarCargas();
 
     }
@@ -44,63 +44,40 @@ public class ServicoCargas {
     }
 
     public void cadastrarNovaCarga() {
-        System.out.println("Cadastro de nova carga:");
+        System.out.println("\nCadastro de nova carga:");
 
-        // Verificar se há tipos de carga cadastrados.
-        if (tiposDeCarga.isEmpty()) {
-            System.out.println("Não há tipos de carga cadastrados. Cadastre um tipo de carga primeiro.");
+        // Verifica se existem tipos de carga para cadastrar uma nova carga.
+        if (this.tiposDeCarga.isEmpty()) {
+            System.out.println("Não há tipos de carga cadastrados.");
             return;
         }
 
-        // Selecionar o tipo de carga.
-        tiposDeCarga.forEach(tipo -> System.out.println("Número: " + tipo.getNumero() + ", Descrição: " + tipo.getDescricao()));
-        System.out.print("Escolha um tipo de carga pelo número: ");
-        int numeroTipoCarga = scanner.nextInt();
-        TipoCarga tipoCargaSelecionada = tiposDeCarga.stream()
-                .filter(tipo -> tipo.getNumero() == numeroTipoCarga)
-                .findFirst()
-                .orElse(null);
-
-        if (tipoCargaSelecionada == null) {
-            System.out.println("Tipo de carga não encontrado. Por favor, tente novamente.");
-            return;
-        }
-
-        // Coletar dados da carga.
+        // Solicita informações da carga.
         System.out.print("Informe o código da carga: ");
-        int codigoCarga = scanner.nextInt();
+        int codigo = scanner.nextInt();
         System.out.print("Informe o peso da carga (em toneladas): ");
-        int pesoCarga = scanner.nextInt();
+        int peso = scanner.nextInt();
         System.out.print("Informe o valor declarado da carga: ");
-        double valorDeclarado = scanner.nextDouble();
+        double valor = scanner.nextDouble();
         System.out.print("Informe o tempo máximo para o frete (em dias): ");
-        int tempoMaximo = scanner.nextInt();
-        scanner.nextLine(); // Limpa o buffer do scanner após ler um número.
+        int tempoFrete = scanner.nextInt();
+        scanner.nextLine(); // Limpa o buffer do scanner.
 
-        // Selecionar cliente.
-        Cliente cliente = servicoClientes.selecionarCliente();
-        // Selecionar destinos de origem e destino.
-        Destino origem = servicoDestinos.selecionarDestino("origem");
-        Destino destino = servicoDestinos.selecionarDestino("destino");
+        // Seleciona o tipo de carga.
+        System.out.print("Escolha o tipo de carga pelo número: ");
+        tiposDeCarga.forEach(tipo -> System.out.println(tipo.getNumero() + " - " + tipo.getDescricao()));
+        int escolhaTipo = scanner.nextInt();
+        scanner.nextLine(); // Limpa o buffer do scanner.
+        TipoCarga tipoCargaSelecionada = tiposDeCarga.get(escolhaTipo - 1);
 
-        // Encontrar um caminhão disponível.
-        Caminhao caminhaoDisponivel = servicoCaminhoes.encontrarCaminhaoDisponivel();
-        if (caminhaoDisponivel == null) {
-            System.out.println("Não há caminhões disponíveis no momento. A carga não pode ser cadastrada.");
-            return;
-        }
+        // Cria a carga com status "Pendente".
+        Carga novaCarga = new Carga(codigo, peso, valor, tempoFrete, null, null, tipoCargaSelecionada, null, "Pendente", null);
 
-        // Criar a nova carga.
-        Carga novaCarga = new Carga(codigoCarga, pesoCarga, valorDeclarado, tempoMaximo, origem, destino, tipoCargaSelecionada, cliente, "Pendente", caminhaoDisponivel);
-
-        // Definir o caminhão e alterar a situação da carga para 'Locada'.
-        novaCarga.definirCaminhao(caminhaoDisponivel);
-
-        // Adicionar a nova carga à lista de cargas pendentes.
-        cargasPendentes.offer(novaCarga);
-
-        System.out.println("Carga cadastrada com sucesso e adicionada à fila de pendências. Caminhão designado: " + caminhaoDisponivel.getNome());
+        // Adiciona a carga na fila de cargas pendentes.
+        cargasPendentes.add(novaCarga);
+        System.out.println("Carga cadastrada com sucesso e status definido como 'Pendente'.");
     }
+
 
 
     public void inicializarCargas() {
@@ -196,8 +173,6 @@ public class ServicoCargas {
             System.out.println("Valor Declarado: R$ " + carga.getValorDeclarado());
             System.out.println("Tempo Máximo para o Frete: " + carga.getTempoMaximo() + " dias");
             System.out.println("Tipo de Carga: " + (carga.getTipoCarga() != null ? carga.getTipoCarga().getDescricao() : "Tipo de carga não atribuído"));
-            System.out.println("Origem: " + (carga.getOrigem() != null ? carga.getOrigem().getSigla() : "Origem não atribuída"));
-            System.out.println("Destino: " + (carga.getDestino() != null ? carga.getDestino().getSigla() : "Destino não atribuído"));
             String nomeCaminhao = carga.getCaminhaoDesignado() != null ? carga.getCaminhaoDesignado().getNome() : "Não Atribuído";
             System.out.println("Caminhão Designado: " + nomeCaminhao);
             System.out.println("-----------------------------------");
