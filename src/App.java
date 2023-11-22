@@ -1,5 +1,21 @@
 import java.util.*;
 
+/**
+ * Classe App central do Sistema de Gerenciamento de Cargas.
+ *
+ * Esta classe é responsável por orquestrar as operações principais do sistema, incluindo
+ * a inicialização de todos os serviços e a interação com o usuário através de um menu de opções.
+ *
+ * Através do menu, o usuário pode realizar diversas ações, como cadastrar novos destinos,
+ * caminhões, clientes e tipos de carga, além de gerenciar as cargas, fretes e itinerários.
+ *
+ * A classe também lida com a persistência de dados, carregando e salvando informações
+ * em um arquivo CSV para manter o estado entre diferentes execuções do programa.
+ *
+ * Os serviços individuais de cada componente do sistema são encapsulados em classes separadas,
+ * e a classe App coordena as interações entre esses serviços para executar as operações solicitadas.
+ */
+
 import menu.ServicoMenu;
 import services.*;
 import model.*;
@@ -15,22 +31,21 @@ public class App {
     private final Scanner scanner = new Scanner(System.in);
     private ServicoItinerario servicoItinerario;
     private ServicoFretes servicoFretes;
-    private ServicoCargas servicoCargas; // Alterado para camelCase
-    private ServicoTipoCargas servicoTipoCargas; // Nova instância para gerenciar tipos de carga
+    private ServicoCargas servicoCargas;
+    private ServicoTipoCargas servicoTipoCargas;
 
-    /* Instanciações das classes de serviço */
-    private ServicoCaminhoes servicoCaminhoes = new ServicoCaminhoes(); // Alterado para camelCase e private
-    private ServicoClientes servicoClientes = new ServicoClientes(); // Alterado para private
-    private ServicoMenu menu = new ServicoMenu(); // Alterado para private
-    private ServicoDestinos servicoDestinos = new ServicoDestinos(); // Alterado para private
+    private ServicoCaminhoes servicoCaminhoes = new ServicoCaminhoes();
+    private ServicoClientes servicoClientes = new ServicoClientes();
+    private ServicoMenu menu = new ServicoMenu();
+    private ServicoDestinos servicoDestinos = new ServicoDestinos();
 
-    private FileManager fileManager = new FileManager(); // Alterado para private
+    private FileManager fileManager = new FileManager();
 
     public App() {
-        this.servicoTipoCargas = new ServicoTipoCargas(); // Inicialização do ServicoTipoCargas
-        this.servicoCargas = new ServicoCargas(servicoClientes, servicoDestinos, servicoTipoCargas.getTiposDeCarga(), servicoCaminhoes); // Adicione servicoCaminhoes aqui
+        this.servicoTipoCargas = new ServicoTipoCargas();
+        this.servicoCargas = new ServicoCargas(servicoClientes, servicoDestinos, servicoTipoCargas.getTiposDeCarga(), servicoCaminhoes);
         this.servicoItinerario = new ServicoItinerario(new ServicoDestinos());
-        inicializarSistema(); // Chamada para inicializar o sistema
+        inicializarSistema();
     }
 
 
@@ -101,7 +116,7 @@ public class App {
                         System.out.println("Opção inválida! Tente novamente.");
                 }
             } while (opcao != 0);
-            scanner.close(); // Fecha o Scanner
+            scanner.close();
     }
 
     private void carregaDados() {

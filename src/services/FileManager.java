@@ -121,28 +121,35 @@ public class FileManager {
         }
     }
 
-    public void gravarFretesCSV(String caminhoArquivoFretes, Queue<Carga> cargasPendentes) {
+    // Método para gravar fretes (cargas locadas) em arquivo CSV
+    public void gravarFretesCSV(String caminhoArquivoFretes, Queue<Carga> cargasLocadas) {
         try (FileWriter fwFretes = new FileWriter(caminhoArquivoFretes)) {
-            fwFretes.append("Codigo, Peso, ValorDeclarado, TempoMaximo, Origem, Destino, TipoCarga, Cliente, Situacao\n");
-            for (Carga carga : cargasPendentes) {
-                fwFretes.append(String.valueOf(carga.getCodigo())) // Converta para String
-                        .append(", ")
-                        .append(String.valueOf(carga.getPeso())) // Converta para String
-                        .append(", ")
-                        .append(String.valueOf(carga.getValorDeclarado())) // Converta para String
-                        .append(", ")
-                        .append(String.valueOf(carga.getTempoMaximo())) // Converta para String
-                        .append(", ")
-                        .append(carga.getOrigem().getSigla())
-                        .append(", ")
-                        .append(carga.getDestino().getSigla())
-                        .append(", ")
-                        .append(carga.getTipoCarga().getDescricao())
-                        .append(", ")
-                        .append(carga.getCliente().getNome())
-                        .append(", ")
-                        .append(carga.getSituacao())
-                        .append("\n");
+            if (cargasLocadas.isEmpty()) {
+                fwFretes.write("Lista vazia\n");
+            } else {
+                fwFretes.append("Codigo, Peso, ValorDeclarado, TempoMaximo, Origem, Destino, TipoCarga, Cliente, Situacao\n");
+                for (Carga carga : cargasLocadas) {
+                    if (carga.getSituacao().equals("Locada")) {
+                        fwFretes.append(String.valueOf(carga.getCodigo()))
+                                .append(", ")
+                                .append(String.valueOf(carga.getPeso()))
+                                .append(", ")
+                                .append(String.valueOf(carga.getValorDeclarado()))
+                                .append(", ")
+                                .append(String.valueOf(carga.getTempoMaximo()))
+                                .append(", ")
+                                .append(carga.getOrigem().getSigla())
+                                .append(", ")
+                                .append(carga.getDestino().getSigla())
+                                .append(", ")
+                                .append(carga.getTipoCarga().getDescricao())
+                                .append(", ")
+                                .append(carga.getCliente().getNome())
+                                .append(", ")
+                                .append(carga.getSituacao())
+                                .append("\n");
+                    }
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -150,10 +157,11 @@ public class FileManager {
     }
 
 
-    public void imprimirCadastros(List<Caminhao> caminhoes, List<Cliente> clientes, List<Destino> destinos, List<Itinerario> itinerarios, List<TipoCarga> tiposDeCarga) {
+    public void imprimirCadastros(List<Caminhao> caminhoes, List<Cliente> clientes, List<Destino> destinos, List<Itinerario> itinerarios, List<TipoCarga> tiposDeCarga, Queue<Carga> cargasPendentes, Queue<Carga> cargasLocadas) {
         try {
+            // Verifica se as listas básicas estão vazias
             if (caminhoes.isEmpty() || clientes.isEmpty() || destinos.isEmpty() || itinerarios.isEmpty() || tiposDeCarga.isEmpty()) {
-                throw new IllegalStateException("Uma ou mais listas estão vazias.");
+                throw new IllegalStateException("Uma ou mais listas básicas estão vazias.");
             }
 
             String caminhoArquivoCaminhoes = "caminhoes.csv";
@@ -161,14 +169,16 @@ public class FileManager {
             String caminhoArquivoDestinos = "destinos.csv";
             String caminhoArquivoItinerarios = "itinerarios.csv";
             String caminhoArquivoTiposCarga = "tiposCarga.csv";
-
+            String caminhoArquivoCargas = "cargas.csv";
+            String caminhoArquivoFretes = "fretes.csv";
 
             gravarCaminhoesCSV(caminhoArquivoCaminhoes, caminhoes);
             gravarClientesCSV(caminhoArquivoClientes, clientes);
             gravarDestinosCSV(caminhoArquivoDestinos, destinos);
             gravarItinerariosCSV(caminhoArquivoItinerarios, itinerarios);
             gravarTiposDeCargaCSV(caminhoArquivoTiposCarga, tiposDeCarga);
-
+            gravarCargasCSV(caminhoArquivoCargas, cargasPendentes);
+            gravarFretesCSV(caminhoArquivoFretes, cargasLocadas);
 
             System.out.println("Dados salvos em arquivos CSV.");
         } catch (IllegalStateException e) {
@@ -255,6 +265,39 @@ public class FileManager {
 
         // Exemplo genérico, ajuste conforme a estrutura de suas subclasses de TipoCarga
         return new TipoCarga(numero, descricao);
+    }
+
+    // Método para gravar cargas em arquivo CSV
+    public void gravarCargasCSV(String caminhoArquivoCargas, Queue<Carga> cargasPendentes) {
+        try (FileWriter fwCargas = new FileWriter(caminhoArquivoCargas)) {
+            if (cargasPendentes.isEmpty()) {
+                fwCargas.write("Lista vazia\n");
+            } else {
+                fwCargas.append("Codigo, Peso, ValorDeclarado, TempoMaximo, Origem, Destino, TipoCarga, Cliente, Situacao\n");
+                for (Carga carga : cargasPendentes) {
+                    fwCargas.append(String.valueOf(carga.getCodigo()))
+                            .append(", ")
+                            .append(String.valueOf(carga.getPeso()))
+                            .append(", ")
+                            .append(String.valueOf(carga.getValorDeclarado()))
+                            .append(", ")
+                            .append(String.valueOf(carga.getTempoMaximo()))
+                            .append(", ")
+                            .append(carga.getOrigem().getSigla())
+                            .append(", ")
+                            .append(carga.getDestino().getSigla())
+                            .append(", ")
+                            .append(carga.getTipoCarga().getDescricao())
+                            .append(", ")
+                            .append(carga.getCliente().getNome())
+                            .append(", ")
+                            .append(carga.getSituacao())
+                            .append("\n");
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
