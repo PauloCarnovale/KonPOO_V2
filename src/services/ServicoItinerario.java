@@ -88,7 +88,14 @@ public class ServicoItinerario {
         } else {
             System.out.println("Lista de Itinerários:");
             for (Itinerario itinerario : listaDeItinerarios) {
-                System.out.println(itinerario);
+                String itinerarioFormatado = String.format(
+                        "Itinerario [codigo=%d, origem=%s, destino=%s, distancia=%.1f km]",
+                        itinerario.getCodigo(),
+                        itinerario.getOrigem().getSigla(),
+                        itinerario.getDestino().getSigla(),
+                        itinerario.getDistancia()
+                );
+                System.out.println(itinerarioFormatado);
             }
         }
     }
