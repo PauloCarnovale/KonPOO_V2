@@ -122,11 +122,11 @@ public class ServicoCargas {
 
     public void consultarCargas() {
         if (cargasPendentes.isEmpty()) {
-            System.out.println("Não há cargas pendentes cadastradas.");
+            System.out.println("Não há cargas cadastradas.");
             return;
         }
 
-        System.out.println("Lista de Cargas Pendentes:");
+        System.out.println("Lista de Cargas Cadastradas:");
         for (Carga carga : cargasPendentes) {
             System.out.println("Código da Carga: " + carga.getCodigo());
             System.out.println("Cliente: " + (carga.getCliente() != null ? carga.getCliente().getNome() : "Cliente não atribuído"));
@@ -136,6 +136,7 @@ public class ServicoCargas {
             System.out.println("Tipo de Carga: " + (carga.getTipoCarga() != null ? carga.getTipoCarga().getDescricao() : "Tipo de carga não atribuído"));
             String nomeCaminhao = carga.getCaminhaoDesignado() != null ? carga.getCaminhaoDesignado().getNome() : "Não Atribuído";
             System.out.println("Caminhão Designado: " + nomeCaminhao);
+            System.out.println("Situação: " + carga.getSituacao());
             System.out.println("-----------------------------------");
         }
     }

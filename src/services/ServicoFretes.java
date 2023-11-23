@@ -11,6 +11,7 @@ public class ServicoFretes {
     private Queue<Carga> cargasPendentes;
     private List<Caminhao> caminhoesDisponiveis;
     private ServicoItinerario servicoItinerario;
+
     private Scanner scanner = new Scanner(System.in);
 
     public ServicoFretes(Queue<Carga> cargasPendentes, List<Caminhao> caminhoesDisponiveis, ServicoItinerario servicoItinerario) {
@@ -24,7 +25,6 @@ public class ServicoFretes {
     }
 
     public void fretarCargas() {
-        System.out.println("\n");
         if (cargasPendentes.isEmpty()) {
             System.out.println("Não há cargas pendentes para serem fretadas.");
             return;
@@ -32,7 +32,7 @@ public class ServicoFretes {
 
         // Lista as cargas pendentes.
         for (Carga carga : cargasPendentes) {
-            System.out.println("Carga: " + carga);
+            System.out.println("Carga: " + carga.toString());
         }
 
         System.out.print("Digite o código da carga para fretar: ");
@@ -68,19 +68,13 @@ public class ServicoFretes {
         }
 
         // Atribui um caminhão disponível.
-        Caminhao caminhaoDisponivel = null;
-        for (Caminhao caminhao : caminhoesDisponiveis) {
-            if (caminhao.isDisponivel()) {
-                caminhaoDisponivel = caminhao;
-                break;
-            }
-        }
-
+        Caminhao caminhaoDisponivel = encontrarCaminhaoDisponivel(cargaEscolhida);
         if (caminhaoDisponivel == null) {
             System.out.println("Não há caminhões disponíveis.");
             cargaEscolhida.setSituacao("Cancelada");
             return;
         }
+
 
         // Calcula o valor do frete e apresentar ao usuário.
         double valorFrete = calcularValorFrete(
@@ -116,13 +110,14 @@ public class ServicoFretes {
         }
     }
 
-    private Caminhao encontrarCaminhaoDisponivel() {
+    private Caminhao encontrarCaminhaoDisponivel(Carga carga) {
         for (Caminhao caminhao : caminhoesDisponiveis) {
-            if (caminhao.estaDisponivel()) {
+            if (caminhao.estaDisponivel() && caminhao.podeTransportar(carga)) {
+                caminhao.setDisponivel(false); // Marca o caminhão como indisponível
                 return caminhao;
             }
         }
-        return null;
+        return null; // Retorna null se nenhum caminhão disponível for encontrado
     }
     private double calcularValorFrete(double distancia, int peso, double custoPorKm, TipoCarga tipoCarga) {
         double precoPorDistancia = distancia * custoPorKm;

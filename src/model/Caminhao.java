@@ -38,7 +38,7 @@ public class Caminhao {
     private double autonomia;
     private double custoPorKm;
     private String codigo;
-    private boolean disponivel;
+    private boolean disponivel=true;
 
     public Caminhao(String nome, double velocidade, double autonomia, double custoPorKm, String codigo) {
         setNome(nome);
@@ -49,7 +49,7 @@ public class Caminhao {
     }
 
     public boolean podeTransportar(Carga carga) {
-        return this.disponivel; // ou qualquer outra lógica simples que você deseja implementar
+        return this.disponivel;
     }
     public String getNome() {
         return nome;
